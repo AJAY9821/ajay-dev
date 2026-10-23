@@ -1,0 +1,285 @@
+/* ==========================================================================
+   TERMINAL BOOTLOADER STYLES
+   Inspired by raomuhammadhamza.tech, tailored for AJAY.DEV (Full Stack Dev)
+   ========================================================================== */
+
+.terminal-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: #08080d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  color: #d1d5db;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Subtle CRT Scanlines & Screen Vignette */
+.terminal-loader-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.45) 50%
+  ),
+  radial-gradient(ellipse at center, rgba(14, 20, 35, 0.2) 0%, rgba(5, 5, 8, 0.85) 100%);
+  background-size: 100% 4px, 100% 100%;
+  z-index: 10;
+  opacity: 0.75;
+}
+
+/* Skip Button */
+.loader-skip-btn {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #71717a;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loader-skip-btn kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 0.65rem;
+  color: #a1a1aa;
+}
+
+.loader-skip-btn:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+}
+
+/* Main Container */
+.terminal-loader-content {
+  position: relative;
+  z-index: 15;
+  width: 90%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Command Prompt Line */
+.loader-prompt {
+  font-size: 0.95rem;
+  color: #e4e4e7;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.loader-prompt-symbol {
+  color: #39ff14;
+  font-weight: 700;
+  margin-right: 0.25rem;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+}
+
+.loader-prompt-cmd {
+  color: #f4f4f5;
+}
+
+.loader-prompt-flag {
+  color: #a1a1aa;
+}
+
+.loader-prompt-target {
+  color: #ec4899;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+}
+
+.loader-prompt-arg {
+  color: #38bdf8;
+}
+
+/* Dynamic Telemetry / SVG Chart */
+.loader-chart-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.loader-chart-svg {
+  width: 100%;
+  height: 90px;
+  overflow: visible;
+}
+
+.loader-chart-path {
+  fill: none;
+  stroke: #ff7285;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(255, 114, 133, 0.7));
+  transition: all 0.05s linear;
+}
+
+.loader-chart-dot {
+  fill: #ffffff;
+  stroke: #ff7285;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px rgba(255, 114, 133, 1));
+}
+
+.loader-chart-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #71717a;
+  letter-spacing: 0.05em;
+}
+
+.loader-chart-value {
+  color: #e4e4e7;
+  font-weight: 500;
+}
+
+/* Terminal Log Feed */
+.loader-logs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-height: 140px;
+  font-size: 0.85rem;
+}
+
+.loader-log-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: logLineIn 0.25s forwards ease-out;
+}
+
+@keyframes logLineIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loader-tag-ok {
+  color: #39ff14;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.35);
+}
+
+.loader-log-text {
+  color: #a1a1aa;
+}
+
+.loader-log-check {
+  color: #39ff14;
+  margin-left: 0.25rem;
+}
+
+/* Live Telemetry Ticker */
+.loader-ticker {
+  font-size: 0.8rem;
+  color: #71717a;
+  letter-spacing: 0.04em;
+}
+
+.loader-ticker-active {
+  color: #a1a1aa;
+}
+
+/* Segmented Block Progress Bar */
+.loader-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.loader-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.loader-progress-title {
+  color: #ff7285;
+  text-shadow: 0 0 8px rgba(255, 114, 133, 0.4);
+}
+
+.loader-progress-pct {
+  color: #e4e4e7;
+}
+
+.loader-progress-blocks {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+}
+
+.loader-block {
+  flex: 1;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+}
+
+.loader-block.filled {
+  background-color: #ff7285;
+  box-shadow: 0 0 8px rgba(255, 114, 133, 0.65);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .terminal-loader-content {
+    width: 92%;
+    gap: 1.2rem;
+  }
+  .loader-prompt {
+    font-size: 0.85rem;
+  }
+  .loader-logs {
+    font-size: 0.78rem;
+    min-height: 130px;
+  }
+  .loader-chart-svg {
+    height: 75px;
+  }
+  .loader-skip-btn {
+    top: 16px;
+    right: 16px;
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+}

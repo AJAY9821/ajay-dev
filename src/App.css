@@ -1,0 +1,7 @@
+/* App-level layout */
+.app {
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}

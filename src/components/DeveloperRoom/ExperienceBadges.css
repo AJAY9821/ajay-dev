@@ -1,0 +1,503 @@
+/* ==========================================================================
+   EXPERIENCE LANYARD BADGES (ICARDS)
+   Inspired by raomuhammadhamza.tech/#experience
+   ========================================================================== */
+
+.badges-stage-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(7, 7, 12, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  user-select: none;
+}
+
+/* Pegboard Wall Backdrop */
+.badges-pegboard {
+  position: relative;
+  width: 92%;
+  max-width: 980px;
+  height: 520px;
+  background-color: #171822;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 60px rgba(255, 255, 255, 0.15),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Authentic Pegboard Holes Pattern */
+.badges-pegboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, #090a0f 25%, transparent 26%);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  border-radius: 12px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Pegboard Ambient Backlight Glow Frame */
+.badges-pegboard::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 45px rgba(255, 255, 255, 0.45), inset 0 0 35px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Cards Carousel Track */
+.badges-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+}
+
+/* Individual Badge Wrapper */
+.badge-holder {
+  position: absolute;
+  top: 15px;
+  width: 250px;
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+/* Lanyard Hook / Peg */
+.badge-peg {
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 35% 35%, #94a3b8, #334155);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
+
+/* Lanyard Fabric Strap */
+.badge-strap {
+  width: 24px;
+  height: 55px;
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 4;
+}
+
+/* Metal Clip */
+.badge-clip {
+  width: 32px;
+  height: 16px;
+  background: linear-gradient(180deg, #94a3b8 0%, #cbd5e1 50%, #64748b 100%);
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  margin-top: -2px;
+}
+
+/* The 3D Flip Card Container */
+.badge-card-flipper {
+  position: relative;
+  width: 236px;
+  height: 345px;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+.badge-card-flipper.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Card Faces */
+.badge-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.65),
+    0 0 1px rgba(255, 255, 255, 0.3);
+  background-color: #f1f2f6;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Cutout Slot for Clip */
+.badge-slot {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 6px;
+  background: #090a0f;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+/* Front Face Layout */
+.badge-front {
+  justify-content: space-between;
+}
+
+/* Top Company Header Banner */
+.badge-header-band {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 10px 16px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.badge-company-title {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Front Body */
+.badge-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  gap: 8px;
+  text-align: center;
+}
+
+/* Avatar Photo */
+.badge-avatar-wrap {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Role & Dates */
+.badge-role-title {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.badge-date-sub {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Barcode */
+.badge-barcode-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.badge-barcode-svg {
+  width: 140px;
+  height: 26px;
+}
+
+.badge-flip-hint {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* Back Face Layout */
+.badge-back {
+  transform: rotateY(180deg);
+  padding: 24px 18px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.badge-back-top {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge-back-company {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.badge-back-role {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.badge-back-date {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-back-divider {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  margin: 4px 0 8px 0;
+}
+
+.badge-back-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.badge-back-bullet {
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: #334155;
+  position: relative;
+  padding-left: 14px;
+}
+
+.badge-back-bullet::before {
+  content: '▪';
+  position: absolute;
+  left: 0;
+  color: #e11d48;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.badge-back-flip {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Carousel States (Active, Prev, Next) */
+.badge-holder.state-active {
+  transform: translateX(0) translateZ(80px) scale(1);
+  z-index: 15;
+  opacity: 1;
+  filter: brightness(1);
+}
+
+.badge-holder.state-prev {
+  transform: translateX(-240px) translateZ(-30px) rotateY(18deg) scale(0.85);
+  z-index: 8;
+  opacity: 0.65;
+  filter: brightness(0.7);
+  cursor: pointer;
+}
+
+.badge-holder.state-next {
+  transform: translateX(240px) translateZ(-30px) rotateY(-18deg) scale(0.85);
+  z-index: 8;
+  opacity: 0.65;
+  filter: brightness(0.7);
+  cursor: pointer;
+}
+
+.badge-holder.state-hidden {
+  opacity: 0;
+  transform: translateX(0) translateZ(-200px) scale(0.6);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Badge Navigation Pill (< 01 / 05 >) */
+.badge-nav-bar {
+  position: absolute;
+  bottom: -58px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 14, 22, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 4px 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 30;
+}
+
+.badge-nav-arrow {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ff7285;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.badge-nav-arrow:hover {
+  background: rgba(255, 114, 133, 0.2);
+  border-color: #ff7285;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.badge-nav-count {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e4e4e7;
+  padding: 0 10px;
+  letter-spacing: 0.08em;
+}
+
+/* Top Back to Room Button */
+.badge-back-room-btn {
+  position: absolute;
+  top: 84px;
+  left: 36px;
+  z-index: 40;
+  background: rgba(15, 15, 24, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 114, 133, 0.4);
+  color: #ff7285;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 16px rgba(255, 114, 133, 0.2);
+  transition: all 0.2s ease;
+}
+
+.badge-back-room-btn:hover {
+  background: rgba(255, 114, 133, 0.2);
+  border-color: #ff7285;
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(255, 114, 133, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .badges-pegboard {
+    height: 470px;
+    width: 95%;
+  }
+  .badge-holder {
+    width: 215px;
+    height: 390px;
+  }
+  .badge-card-flipper {
+    width: 205px;
+    height: 310px;
+  }
+  .badge-header-band {
+    height: 75px;
+    padding-top: 20px;
+  }
+  .badge-company-title {
+    font-size: 0.95rem;
+  }
+  .badge-avatar-wrap {
+    width: 50px;
+    height: 50px;
+  }
+  .badge-role-title {
+    font-size: 0.75rem;
+  }
+  .badge-back-bullet {
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+  .badge-holder.state-prev {
+    transform: translateX(-140px) translateZ(-40px) rotateY(20deg) scale(0.72);
+  }
+  .badge-holder.state-next {
+    transform: translateX(140px) translateZ(-40px) rotateY(-20deg) scale(0.72);
+  }
+  .badge-back-room-btn {
+    top: 76px;
+    left: 16px;
+    font-size: 0.72rem;
+    padding: 6px 12px;
+  }
+}

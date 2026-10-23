@@ -1,0 +1,619 @@
+/* ==========================================================================
+   DEVELOPER ROOM (HERO SECTION) STYLES
+   Inspired by raomuhammadhamza.tech, custom-tailored for AJAY.DEV
+   ========================================================================== */
+
+.dev-room-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 650px;
+  background-color: #07070a;
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Perspective Wrapper for 3D Tilt */
+.dev-room-viewport {
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* 3D Canvas Stage */
+.dev-room-stage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* The 3D Rendered Room Background */
+.dev-room-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: contrast(1.05) brightness(0.96);
+  pointer-events: none;
+}
+
+/* Ambient Room Vignette & CRT Scanlines */
+.dev-room-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 50%, rgba(5, 5, 8, 0.75) 100%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 100%, 100% 4px;
+  z-index: 2;
+  transition: background 0.8s ease;
+}
+
+.dev-room-overlay.experience-focused {
+  background: 
+    radial-gradient(ellipse at 80% 36%, rgba(0, 0, 0, 0) 30%, rgba(5, 5, 8, 0.55) 85%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+}
+
+.dev-room-overlay.projects-focused {
+  background: 
+    radial-gradient(ellipse at 36% 36%, rgba(0, 212, 255, 0.08) 25%, rgba(5, 5, 8, 0.6) 85%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+}
+
+.dev-room-overlay.contact-focused {
+  background: 
+    radial-gradient(ellipse at 37% 64%, rgba(251, 113, 133, 0.12) 20%, rgba(5, 5, 8, 0.62) 80%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+}
+
+/* Floating Interactive Hotspots */
+.room-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 8px;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.25s ease;
+}
+
+.room-hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Glowing Diamond Pin */
+.diamond-pin {
+  width: 14px;
+  height: 14px;
+  background: #ff7285;
+  transform: rotate(45deg);
+  box-shadow: 0 0 14px rgba(255, 114, 133, 0.9), 0 0 28px rgba(255, 114, 133, 0.5);
+  animation: diamondPulse 2.4s ease-in-out infinite;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.room-hotspot:hover .diamond-pin {
+  background: #00d4ff;
+  box-shadow: 0 0 18px rgba(0, 212, 255, 1), 0 0 32px rgba(0, 212, 255, 0.6);
+}
+
+@keyframes diamondPulse {
+  0%, 100% {
+    transform: rotate(45deg) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: rotate(45deg) scale(1.22);
+    opacity: 1;
+  }
+}
+
+/* Sound Wave Ring for Speaker */
+.sound-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 114, 133, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: soundRipple 2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes soundRipple {
+  0% {
+    width: 14px;
+    height: 14px;
+    opacity: 1;
+  }
+  100% {
+    width: 44px;
+    height: 44px;
+    opacity: 0;
+  }
+}
+
+/* Hotspot Floating Tooltip Label */
+.hotspot-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #f4f4f5;
+  background: rgba(10, 10, 16, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.room-hotspot:hover .hotspot-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   UI OVERLAYS
+   ========================================================================== */
+
+/* Top Right Sound & Reset Controls */
+.room-top-bar {
+  position: absolute;
+  top: 84px;
+  right: 28px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.undock-btn {
+  background: rgba(15, 15, 24, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 114, 133, 0.4);
+  color: #ff7285;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 16px rgba(255, 114, 133, 0.2);
+  transition: all 0.2s ease;
+}
+
+.undock-btn:hover {
+  background: rgba(255, 114, 133, 0.15);
+  border-color: #ff7285;
+  box-shadow: 0 0 24px rgba(255, 114, 133, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Bottom Left Signature */
+.room-signature {
+  position: absolute;
+  bottom: 32px;
+  left: 36px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.room-sig-name {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.room-sig-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #ff7285;
+  text-transform: uppercase;
+}
+
+.room-sig-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
+  display: inline-block;
+}
+
+/* Bottom Center Floating Navigation Dock */
+.room-dock-wrap {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  width: auto;
+}
+
+.room-dock {
+  display: flex;
+  align-items: center;
+  background: rgba(14, 14, 22, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.08);
+}
+
+.room-dock-item {
+  position: relative;
+  background: none;
+  border: none;
+  color: #a1a1aa;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.room-dock-item .dock-num {
+  font-size: 0.68rem;
+  color: #71717a;
+  transition: color 0.2s ease;
+}
+
+.room-dock-item:hover {
+  color: #ffffff;
+}
+
+.room-dock-item.active {
+  color: #ffffff;
+  background: rgba(255, 114, 133, 0.16);
+  border: 1px solid rgba(255, 114, 133, 0.4);
+  box-shadow: 0 0 16px rgba(255, 114, 133, 0.3);
+}
+
+.room-dock-item.active .dock-num {
+  color: #ff7285;
+}
+
+/* Drag to look around hint */
+.room-drag-hint {
+  position: absolute;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: #71717a;
+  background: rgba(10, 10, 16, 0.65);
+  backdrop-filter: blur(8px);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.4s ease;
+}
+
+/* ==========================================================================
+   DOCKED MODAL / SURFACE OVERLAYS
+   ========================================================================== */
+
+.docked-surface-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.docked-surface-card {
+  position: absolute;
+  z-index: 24;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 680px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(13, 13, 20, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 212, 255, 0.15);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.docked-surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+
+.docked-surface-title {
+  font-family: var(--font-mono, monospace);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff7285;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.docked-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a1a1aa;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.docked-close-btn:hover {
+  background: rgba(255, 114, 133, 0.2);
+  color: #ffffff;
+  border-color: #ff7285;
+}
+
+/* Projects Grid inside Dock */
+.dock-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.dock-project-card {
+  background: rgba(20, 20, 32, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.dock-project-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  transform: translateY(-2px);
+  background: rgba(26, 26, 42, 0.85);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.12);
+}
+
+.dock-project-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.dock-project-desc {
+  font-size: 0.82rem;
+  color: #a1a1aa;
+  line-height: 1.4;
+}
+
+.dock-project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.dock-project-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #00d4ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Experience Lanyard Badges inside Dock */
+.dock-badges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dock-badge-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(20, 20, 32, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.badge-tag-icon {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(255, 114, 133, 0.15);
+  color: #ff7285;
+  border: 1px solid rgba(255, 114, 133, 0.3);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.dock-badge-info h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.dock-badge-info p {
+  font-size: 0.8rem;
+  color: #a1a1aa;
+  margin-top: 2px;
+}
+
+.dock-badge-date {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: #71717a;
+}
+
+/* Contact List inside Dock */
+.dock-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.dock-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(20, 20, 32, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  color: #f4f4f5;
+  text-decoration: none;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.dock-contact-link:hover {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.4);
+  color: #00d4ff;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .room-signature {
+    bottom: 84px;
+    left: 20px;
+  }
+  .room-sig-name {
+    font-size: 1.15rem;
+  }
+  .room-sig-meta {
+    font-size: 0.68rem;
+  }
+  .room-dock-wrap {
+    bottom: 20px;
+    width: 94%;
+  }
+  .room-dock {
+    width: 100%;
+    justify-content: space-around;
+    padding: 3px;
+  }
+  .room-dock-item {
+    padding: 7px 10px;
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+  .room-drag-hint {
+    display: none;
+  }
+  .room-top-bar {
+    top: 76px;
+    right: 16px;
+  }
+}
+
+/* ==========================================================================
+   MINIATURE AMBIENT PEGBOARD PREVIEW IN ROOM
+   ========================================================================== */
+
+.wall-lanyards-preview {
+  position: absolute;
+  top: 27%;
+  left: 89.5%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 12;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: transform 0.25s ease;
+}
+
+.wall-lanyards-preview:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.wall-preview-strap {
+  width: 6px;
+  height: 24px;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  opacity: 0.85;
+}
+
+

@@ -1,0 +1,67 @@
+/* ================================================
+   Navbar.css — Top bar with Resume button
+   ================================================ */
+
+/* ── Fixed header shell (pass-through clicks except on buttons) ── */
+.navbar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 2rem;
+  pointer-events: none;
+}
+
+/* ── Inner container ── */
+.navbar-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 72px;
+}
+
+/* ── Resume button ── */
+.resume-btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  background: rgba(15, 16, 25, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 12px rgba(0, 212, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.resume-btn:hover {
+  background: rgba(0, 212, 255, 0.16);
+  border-color: #00d4ff;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .navbar-header {
+    padding: 0 1rem;
+  }
+  .navbar-inner {
+    height: 60px;
+  }
+  .resume-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.72rem;
+  }
+}
