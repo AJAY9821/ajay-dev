@@ -25,27 +25,10 @@ function App() {
       >
         <Navbar />
 
-        <main>
-          {/* Interactive 3D Developer Room Hero Section */}
+        <main className="w-full h-screen overflow-hidden">
+          {/* Interactive 3D Developer Room Single-Page Canvas */}
           <section id="hero" className="w-full h-screen overflow-hidden relative">
             <DeveloperRoom />
-          </section>
-
-          <section id="about" className="min-h-screen flex items-center justify-center">
-            <h2 className="text-3xl font-bold gradient-text">About</h2>
-          </section>
-
-          <section id="skills" className="min-h-screen flex items-center justify-center">
-            <h2 className="text-3xl font-bold gradient-text">Skills</h2>
-          </section>
-          <section id="projects" className="min-h-screen flex items-center justify-center">
-            <h2 className="text-3xl font-bold gradient-text">Projects</h2>
-          </section>
-          <section id="experience" className="min-h-screen flex items-center justify-center">
-            <h2 className="text-3xl font-bold gradient-text">Experience</h2>
-          </section>
-          <section id="contact" className="min-h-screen flex items-center justify-center">
-            <h2 className="text-3xl font-bold gradient-text">Contact</h2>
           </section>
         </main>
       </motion.div>

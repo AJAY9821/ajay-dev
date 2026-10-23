@@ -16,73 +16,75 @@ export interface WallCardData {
 
 const EXPERIENCE_CARDS: WallCardData[] = [
   {
-    id: 'geo-tv',
-    company: 'GEO TV Network',
-    role: 'System Developer and Analyst',
-    period: 'SEP 2025 TO PRESENT',
-    strapColor: '#b91c1c', // Crimson Red (matching Image 2)
+    id: 'probey-hrms',
+    company: 'ProBey Services',
+    role: 'Full Stack Developer — HRMS',
+    period: 'NOV 2025 TO SEP 2026',
+    strapColor: '#b91c1c', // Crimson Red
     accentColor: '#dc2626',
     barcodeId: '984021948201',
     bullets: [
-      'RAG search over 1,000+ scripts on Qdrant, cutting retrieval time by 70%.',
-      'DramaGPT: the C-suite asks production data questions in plain English; decisions 3x faster.',
-      'Automated metadata ingestion pipelines for multi-format video assets.',
+      'Designed and developed the Payroll Management module end-to-end, automating salary computation, deductions, and payslip generation.',
+      'Built Leave Management module covering leave application, multi-level approval workflows, and real-time leave balance tracking.',
+      'Implemented role-based dashboards so employees, managers, and HR admins each get tailored views and permissions.',
+      'Worked closely with HR stakeholders to translate business requirements into scalable backend logic and clean REST APIs.',
     ],
   },
   {
-    id: 'sehatlings',
-    company: 'Sehatlings',
-    role: 'Founding Engineer',
-    period: 'JUL 2024 TO PRESENT',
-    strapColor: '#005953', // Deep Teal (matching Image 2)
+    id: 'probey-portal',
+    company: 'ProBey Services',
+    role: 'AI & Backend Engineer — Career Portal',
+    period: 'NOV 2025 TO SEP 2026',
+    strapColor: '#005953', // Deep Teal
     accentColor: '#0d9488',
     barcodeId: '849204918231',
     bullets: [
-      'Medical platform on Claude 3.5 for biomarker extraction & pathology triage, 70% less manual review.',
-      'RAG clinical engine that turns lab data into actionable health roadmaps & specialist referrals.',
-      'Architected end-to-end HIPAA-compliant clinician workspace with sub-100ms render speeds.',
+      'Built AI-powered resume parsing pipeline using Google API, extracting candidate skills, experience, and education into structured recruiter profiles.',
+      'Analyzed and optimized MongoDB schemas, indexes, and query patterns to reduce response times under increasing data volume.',
+      'Developed RESTful APIs supporting job postings, candidate applications, and recruiter workflows across the platform.',
+      'Applied caching and query optimization techniques to keep platform responsive as candidate and job-listing volume expanded.',
     ],
   },
   {
-    id: 'loreal',
-    company: "L'Oréal Paris",
-    role: 'Business Planning Analyst',
-    period: 'APR 2024 TO JUL 2024',
-    strapColor: '#18181b', // Dark Charcoal / Black (matching Image 2)
+    id: 'probey-evos',
+    company: 'ProBey Services',
+    role: 'React Frontend Developer — EVOS',
+    period: 'NOV 2025 TO SEP 2026',
+    strapColor: '#18181b', // Dark Charcoal
     accentColor: '#eab308',
     barcodeId: '749102849102',
     bullets: [
-      'Cut sales reporting from several days to same-day with an automated daily reporting engine.',
-      'Unified 3 to 4 fragmented data sources into one standardized high-performance pipeline.',
-      'Eliminated manual spreadsheet reconciliation errors with automated data validation.',
+      'Built interactive, responsive frontend interfaces in React, converting UI/UX designs into reusable component-based architecture.',
+      'Ensured seamless cross-device responsiveness and sub-second render speeds across all core workflow views.',
+      'Coordinated with designers and backend engineers to integrate frontend components with REST APIs for seamless end-to-end flow.',
     ],
   },
   {
-    id: 'nielseniq',
-    company: 'NielsenIQ',
-    role: 'Data Quality Analyst',
-    period: 'SEP 2023 TO SEP 2024',
+    id: 'galgotias-mca',
+    company: 'Galgotias University',
+    role: 'Master of Computer Applications (MCA)',
+    period: '2024 TO 2026 · CGPA 7.1',
     strapColor: '#1d4ed8', // Royal Blue
     accentColor: '#3b82f6',
     barcodeId: '650192849182',
     bullets: [
-      'Automated statistical validation in Power Query to catch bias and outliers across 500k+ rows.',
-      'Built live KPI dashboards for dataset health, cutting overall validation turnaround time by 40%.',
-      'Orchestrated automated alerting workflows for immediate pipeline schema mismatch detection.',
+      'Master of Computer Applications (MCA) completed with 7.1 CGPA specializing in Software Architecture and Full Stack Development.',
+      'Deep focus on Data Structures & Algorithms, Advanced Database Optimization, and System Design.',
+      'Developed multiple production-ready full-stack applications with MERN stack, WebSockets, and Cloud APIs.',
     ],
   },
   {
-    id: 'techit',
-    company: 'TechIT Solutions',
-    role: 'Full Stack Tech Lead',
-    period: 'DEC 2022 TO JUN 2023',
+    id: 'ymca-bca',
+    company: 'J.C. Bose UST, YMCA',
+    role: 'Bachelor of Computer Applications (BCA)',
+    period: 'COMPLETED · CGPA 7.1',
     strapColor: '#6d28d9', // Deep Purple
     accentColor: '#8b5cf6',
     barcodeId: '540192837492',
     bullets: [
-      'Real-time edge threat detection using YOLO computer vision models with sub-second latency.',
-      'Event-driven instant alerts via Pushover API, completely replacing manual dispatch monitoring.',
-      'Led 5-engineer team from prototyping to production rollout on distributed Kubernetes clusters.',
+      'Bachelor of Computer Applications completed with 7.1 CGPA.',
+      'Strong academic and practical grounding in Object-Oriented Programming (Java, C++), Data Structures, and Relational Databases.',
+      'Built academic projects focused on web technologies and algorithmic problem solving.',
     ],
   },
 ]
@@ -160,7 +162,7 @@ export default function WallPegboardExperience({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* ── Top Bar: Back to Room & Options ── */}
       <div className="pegboard-top-bar">
@@ -200,9 +202,9 @@ export default function WallPegboardExperience({
         <motion.div
           className="pegboard-board"
           initial={{
-            scale: 0.9,
+            scale: 0.96,
             opacity: 0,
-            y: 12,
+            y: 8,
           }}
           animate={{
             scale: 1,
@@ -210,12 +212,12 @@ export default function WallPegboardExperience({
             y: 0,
           }}
           exit={{
-            scale: 0.9,
+            scale: 0.96,
             opacity: 0,
-            y: 12,
+            y: 8,
           }}
           transition={{
-            duration: 0.65,
+            duration: 0.24,
             ease: [0.16, 1, 0.3, 1],
           }}
         >

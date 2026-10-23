@@ -93,7 +93,7 @@ export default function SmartphoneContact({
   }, [onClose])
 
   const copyEmail = () => {
-    navigator.clipboard.writeText('contact@ajay.dev')
+    navigator.clipboard.writeText('ajeysingh4220@gmail.com')
     setEmailCopied(true)
     setTimeout(() => setEmailCopied(false), 2200)
   }
@@ -114,7 +114,7 @@ export default function SmartphoneContact({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* ── Top Bar: Back to Room & Status Pill ── */}
       <div className="smartphone-top-bar">
@@ -142,10 +142,10 @@ export default function SmartphoneContact({
 
         <motion.div
           className="smartphone-device"
-          initial={{ scale: 0.9, opacity: 0, y: 15 }}
+          initial={{ scale: 0.96, opacity: 0, y: 10 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 15 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ scale: 0.96, opacity: 0, y: 10 }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Glass Specular Reflection Highlight */}
           <div className="phone-glass-glare" />
@@ -191,10 +191,10 @@ export default function SmartphoneContact({
 
               <div className="phone-profile-text">
                 <div className="flex items-center justify-center gap-1.5">
-                  <h3 className="phone-profile-name">Ajay</h3>
+                  <h3 className="phone-profile-name">Ajay Singh</h3>
                   <Sparkles size={14} className="text-pink-400" />
                 </div>
-                <p className="phone-profile-role">Full Stack & AI Engineer</p>
+                <p className="phone-profile-role">Software Developer | MERN Stack</p>
 
                 {/* Open to Work Status Badge */}
                 <div className="phone-availability-tag">
@@ -210,7 +210,7 @@ export default function SmartphoneContact({
                 type="button"
                 className="quick-action-btn email"
                 onClick={copyEmail}
-                title="Click to copy email address"
+                title="Click to copy email: ajeysingh4220@gmail.com"
               >
                 <div className="action-circle">
                   {emailCopied ? (
@@ -225,7 +225,7 @@ export default function SmartphoneContact({
               </button>
 
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/ajay-singh-49a874214"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="quick-action-btn linkedin"
@@ -237,7 +237,7 @@ export default function SmartphoneContact({
               </a>
 
               <a
-                href="https://github.com"
+                href="https://github.com/AJAY9821"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="quick-action-btn github"
@@ -249,15 +249,16 @@ export default function SmartphoneContact({
               </a>
 
               <a
-                href="/resume.pdf"
-                download
+                href="https://leetcode.com/u/Ajay_pa/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="quick-action-btn resume"
-                title="Download Resume PDF"
+                title="LeetCode Profile"
               >
                 <div className="action-circle">
                   <FileText size={18} />
                 </div>
-                <span className="action-label">CV PDF</span>
+                <span className="action-label">LeetCode</span>
               </a>
             </div>
 
@@ -352,17 +353,17 @@ export default function SmartphoneContact({
             <div className="phone-meta-row">
               <div className="meta-item">
                 <MapPin size={12} className="text-pink-400" />
-                <span>Karachi, PK · Remote Available</span>
+                <span>Faridabad, Haryana · Remote / On-Site</span>
               </div>
               <div className="meta-item">
                 <Clock size={12} className="text-cyan-400" />
-                <span>Avg response: &lt; 2 hours</span>
+                <span>+91-9821240727</span>
               </div>
             </div>
 
             {/* Direct Email Address Display with Copy */}
-            <div className="phone-email-bar" onClick={copyEmail} title="Click to copy">
-              <span className="font-mono text-xs text-zinc-300">contact@ajay.dev</span>
+            <div className="phone-email-bar" onClick={copyEmail} title="Click to copy email">
+              <span className="font-mono text-xs text-zinc-300">ajeysingh4220@gmail.com</span>
               {emailCopied ? (
                 <span className="copy-badge copied">Copied!</span>
               ) : (

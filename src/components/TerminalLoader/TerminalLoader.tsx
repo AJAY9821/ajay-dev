@@ -13,11 +13,11 @@ interface LogEntry {
 }
 
 const LOGS: LogEntry[] = [
-  { triggerPct: 8, text: 'dataset: fullstack, react 19, typescript, node.js (16 modules)' },
-  { triggerPct: 30, text: 'compiling frontend chunks: 142/142 modules resolved', hasCheck: true },
-  { triggerPct: 52, text: 'optimizing api gateway & microservices: latency 12ms', hasCheck: true },
-  { triggerPct: 75, text: 'caching static assets & preloading webgl shaders', hasCheck: true },
-  { triggerPct: 94, text: 'environment synchronized: all systems operational', hasCheck: true },
+  { triggerPct: 8, text: 'dataset: MERN stack, Node.js, Express, React, MongoDB (16 modules)' },
+  { triggerPct: 30, text: 'compiling REST API endpoints & JWT authentication modules', hasCheck: true },
+  { triggerPct: 52, text: 'optimizing MongoDB schemas, Socket.io & Amazon SES pipeline', hasCheck: true },
+  { triggerPct: 75, text: 'loading 3D developer room environment & asset shaders', hasCheck: true },
+  { triggerPct: 94, text: 'environment synchronized: Ajay Singh portfolio ready', hasCheck: true },
 ]
 
 const TOTAL_BLOCKS = 36

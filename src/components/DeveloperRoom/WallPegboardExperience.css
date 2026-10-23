@@ -23,6 +23,9 @@
   -webkit-backdrop-filter: blur(2px);
   overflow: hidden;
   user-select: none;
+  transform: translateZ(0);
+  will-change: opacity;
+  contain: layout style;
 }
 
 /* ── TOP HEADER BAR: Back to Room & Options ── */

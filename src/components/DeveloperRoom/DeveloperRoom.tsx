@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowLeft, Disc3 } from 'lucide-react'
+import { Disc3, X } from 'lucide-react'
+import gsap from 'gsap'
 import WallPegboardExperience from './WallPegboardExperience'
 import WorkstationProjects from './WorkstationProjects'
 import SmartphoneContact from './SmartphoneContact'
+import AboutDossierExperience from './AboutDossierExperience'
 import './DeveloperRoom.css'
 
-// Contact view synced
-
-type SectionKey = 'projects' | 'experience' | 'about' | 'contact' | 'music' | null
+export type SectionKey = 'projects' | 'experience' | 'about' | 'contact' | 'music' | null
 
 interface HotspotConfig {
   key: SectionKey
@@ -16,9 +16,6 @@ interface HotspotConfig {
   num: string
   x: number // percentage
   y: number // percentage
-  scale: number
-  originX: string
-  originY: string
 }
 
 const HOTSPOTS: HotspotConfig[] = [
@@ -28,9 +25,6 @@ const HOTSPOTS: HotspotConfig[] = [
     num: '01',
     x: 40,
     y: 35,
-    scale: 2.25,
-    originX: '36%',
-    originY: '36%',
   },
   {
     key: 'experience',
@@ -38,9 +32,6 @@ const HOTSPOTS: HotspotConfig[] = [
     num: '02',
     x: 89.5,
     y: 27,
-    scale: 2.15,
-    originX: '89.5%',
-    originY: '27%',
   },
   {
     key: 'about',
@@ -48,9 +39,6 @@ const HOTSPOTS: HotspotConfig[] = [
     num: '03',
     x: 60,
     y: 46,
-    scale: 1.65,
-    originX: '59%',
-    originY: '48%',
   },
   {
     key: 'contact',
@@ -58,9 +46,6 @@ const HOTSPOTS: HotspotConfig[] = [
     num: '04',
     x: 37,
     y: 64,
-    scale: 2.55,
-    originX: '37%',
-    originY: '64%',
   },
   {
     key: 'music',
@@ -68,89 +53,215 @@ const HOTSPOTS: HotspotConfig[] = [
     num: '♪',
     x: 86,
     y: 59,
-    scale: 1.75,
-    originX: '86%',
-    originY: '59%',
   },
 ]
 
+// Pure 3D camera coordinates with fixed center-center transform origin
+interface CameraCoordinates {
+  scale: number
+  xPercent: number
+  yPercent: number
+  rotateX: number
+  rotateY: number
+}
+
+const CAMERA_TARGETS: Record<string, CameraCoordinates> = {
+  idle: {
+    scale: 1.02,
+    xPercent: 0,
+    yPercent: 0,
+    rotateX: 0,
+    rotateY: 0,
+  },
+  projects: {
+    scale: 2.25,
+    xPercent: 38,
+    yPercent: 26,
+    rotateX: -1,
+    rotateY: 5,
+  },
+  experience: {
+    scale: 2.15,
+    xPercent: -58,
+    yPercent: 24,
+    rotateX: 1,
+    rotateY: -4,
+  },
+  about: {
+    scale: 1.82,
+    xPercent: -8,
+    yPercent: 2,
+    rotateX: 1,
+    rotateY: -2,
+  },
+  contact: {
+    scale: 2.55,
+    xPercent: 36,
+    yPercent: -38,
+    rotateX: 12,
+    rotateY: 2,
+  },
+  music: {
+    scale: 2.05,
+    xPercent: -52,
+    yPercent: -12,
+    rotateX: 2,
+    rotateY: -5,
+  },
+}
+
 export default function DeveloperRoom() {
   const [activeSection, setActiveSection] = useState<SectionKey>(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const [displayedSection, setDisplayedSection] = useState<SectionKey>(null)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
 
-  // Handle subtle mouse tilt
+  const containerRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const isTransitioningRef = useRef(false)
+  const activeSectionRef = useRef<SectionKey>(null)
+  activeSectionRef.current = activeSection
+
+  // Fly to section with continuous camera physics
+  const flyToSection = useCallback((targetSection: SectionKey) => {
+    if (isTransitioningRef.current || !targetSection) return
+    if (targetSection === activeSectionRef.current) return
+
+    isTransitioningRef.current = true
+    const fromSection = activeSectionRef.current
+    setActiveSection(targetSection)
+
+    const targetCoords = CAMERA_TARGETS[targetSection] || CAMERA_TARGETS.idle
+    const isCrossFlight = fromSection !== null
+    const flightDuration = isCrossFlight ? 0.6 : 0.65
+
+    const runFlight = () => {
+      if (!stageRef.current) return
+
+      // GSAP hardware-accelerated 3D camera flight - clean uninterrupted 60fps
+      gsap.to(stageRef.current, {
+        scale: targetCoords.scale,
+        xPercent: targetCoords.xPercent,
+        yPercent: targetCoords.yPercent,
+        rotationX: targetCoords.rotateX,
+        rotationY: targetCoords.rotateY,
+        transformPerspective: 1200,
+        duration: flightDuration,
+        ease: 'power2.inOut',
+        overwrite: 'auto',
+        onComplete: () => {
+          // Mount the interactive interface on camera landing: zero frame-drop!
+          setDisplayedSection(targetSection)
+          isTransitioningRef.current = false
+        },
+      })
+    }
+
+    if (displayedSection !== null) {
+      // Step 1: Smoothly dissolve current overlay first
+      setDisplayedSection(null)
+      setTimeout(runFlight, 120)
+    } else {
+      // Direct takeoff from room view
+      runFlight()
+    }
+  }, [displayedSection])
+
+  // Fly camera back out to default wide isometric view
+  const flyBackToRoom = useCallback(() => {
+    if (isTransitioningRef.current || activeSectionRef.current === null) return
+    isTransitioningRef.current = true
+
+    // Step 1: Dissolve overlay immediately
+    setDisplayedSection(null)
+
+    // Step 2: Smooth camera pull-back
+    setTimeout(() => {
+      if (!stageRef.current) return
+
+      gsap.to(stageRef.current, {
+        scale: CAMERA_TARGETS.idle.scale,
+        xPercent: CAMERA_TARGETS.idle.xPercent,
+        yPercent: CAMERA_TARGETS.idle.yPercent,
+        rotationX: 0,
+        rotationY: 0,
+        transformPerspective: 1200,
+        duration: 0.65,
+        ease: 'power2.out',
+        overwrite: 'auto',
+        onComplete: () => {
+          setActiveSection(null)
+          isTransitioningRef.current = false
+        },
+      })
+    }, 100)
+  }, [])
+
+  // Handle subtle mouse tilt when at wide room view
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (activeSection !== null) return // don't tilt when camera is focused on a prop
+      if (activeSectionRef.current !== null || isTransitioningRef.current) return
       const rect = containerRef.current?.getBoundingClientRect()
-      if (!rect) return
+      if (!rect || !stageRef.current) return
 
       const clientX = e.clientX - rect.left
       const clientY = e.clientY - rect.top
       const normalizedX = (clientX / rect.width - 0.5) * 2 // -1 to 1
       const normalizedY = (clientY / rect.height - 0.5) * 2
 
-      setTilt({
-        x: normalizedY * -4, // max 4deg
-        y: normalizedX * 6, // max 6deg
+      gsap.to(stageRef.current, {
+        rotationX: normalizedY * -3.5,
+        rotationY: normalizedX * 5.5,
+        duration: 0.6,
+        ease: 'power1.out',
+        overwrite: 'auto',
       })
 
       if (!hasInteracted) setHasInteracted(true)
     },
-    [activeSection, hasInteracted]
+    [hasInteracted]
   )
 
   const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 })
+    if (activeSectionRef.current === null && !isTransitioningRef.current && stageRef.current) {
+      gsap.to(stageRef.current, {
+        rotationX: 0,
+        rotationY: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    }
   }
 
-  // Escape key closes focused view & flies back
+  // Keyboard Escape listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && activeSection !== null) {
-        setActiveSection(null)
+      if (e.key === 'Escape' && activeSectionRef.current !== null) {
+        flyBackToRoom()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeSection])
+  }, [flyBackToRoom])
 
-  // Listen for navigation events from top Navbar
+  // External open-room-section listener (e.g. from navbar)
   useEffect(() => {
     const handleOpenRoomSection = (e: Event) => {
       const customEvent = e as CustomEvent<SectionKey>
       if (customEvent.detail) {
-        setActiveSection(customEvent.detail)
+        flyToSection(customEvent.detail)
       }
     }
     window.addEventListener('open-room-section', handleOpenRoomSection)
     return () => window.removeEventListener('open-room-section', handleOpenRoomSection)
-  }, [])
-
-  // Get current camera transform for seamless in-room flight
-  const currentSpot = HOTSPOTS.find((h) => h.key === activeSection)
-
-  const stageTransform = currentSpot
-    ? currentSpot.key === 'experience'
-      ? 'perspective(1400px) rotateY(-4deg) scale(2.1) translate3d(-18%, 2%, 0)'
-      : currentSpot.key === 'projects'
-      ? 'perspective(1400px) rotateY(5deg) rotateX(-1deg) scale(2.25) translate3d(24%, 12%, 0)'
-      : currentSpot.key === 'contact'
-      ? 'perspective(1400px) rotateX(14deg) rotateY(2deg) scale(2.55) translate3d(20%, -22%, 0)'
-      : `scale(${currentSpot.scale}) translate3d(0, 0, 0)`
-    : `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.02)`
-
-  const transformOrigin = currentSpot
-    ? `${currentSpot.originX} ${currentSpot.originY}`
-    : 'center center'
+  }, [flyToSection])
 
   const isExperienceFocused = activeSection === 'experience'
   const isProjectsFocused = activeSection === 'projects'
   const isContactFocused = activeSection === 'contact'
-  const isFullInRoomView = isExperienceFocused || isProjectsFocused || isContactFocused
+  const isAboutFocused = activeSection === 'about'
+  const isFullInRoomView = isExperienceFocused || isProjectsFocused || isContactFocused || isAboutFocused
 
   return (
     <div
@@ -161,13 +272,7 @@ export default function DeveloperRoom() {
     >
       {/* 3D Room Stage with Parallax & In-Room Camera Flight */}
       <div className="dev-room-viewport">
-        <div
-          className="dev-room-stage"
-          style={{
-            transform: stageTransform,
-            transformOrigin: transformOrigin,
-          }}
-        >
+        <div ref={stageRef} className="dev-room-stage">
           {/* High-definition 3D Developer Room Render */}
           <img
             src="/developer-room.jpg"
@@ -184,6 +289,8 @@ export default function DeveloperRoom() {
                 ? 'projects-focused'
                 : isContactFocused
                 ? 'contact-focused'
+                : isAboutFocused
+                ? 'about-focused'
                 : ''
             }`}
           />
@@ -194,7 +301,7 @@ export default function DeveloperRoom() {
               className="wall-lanyards-preview"
               onClick={(e) => {
                 e.stopPropagation()
-                setActiveSection('experience')
+                flyToSection('experience')
               }}
               title="Click to inspect Work Experience Badges"
             >
@@ -216,7 +323,7 @@ export default function DeveloperRoom() {
                   if (spot.key === 'music') {
                     setIsPlayingAudio((prev) => !prev)
                   }
-                  setActiveSection(spot.key)
+                  flyToSection(spot.key)
                 }}
                 aria-label={`Open ${spot.label}`}
               >
@@ -230,22 +337,6 @@ export default function DeveloperRoom() {
         </div>
       </div>
 
-      {/* ── Top Left: BACK TO ROOM BUTTON (Flies camera back out for modals) ── */}
-      {activeSection !== null && !isFullInRoomView && (
-        <div style={{ position: 'absolute', top: '84px', left: '36px', zIndex: 40 }}>
-          <button
-            type="button"
-            className="badge-back-room-btn"
-            style={{ position: 'static' }}
-            onClick={() => {
-              setActiveSection(null)
-            }}
-          >
-            <ArrowLeft size={16} /> BACK TO THE ROOM [ESC]
-          </button>
-        </div>
-      )}
-
       {/* Drag to Look Around Hint */}
       {activeSection === null && !hasInteracted && (
         <div className="room-drag-hint">
@@ -255,14 +346,14 @@ export default function DeveloperRoom() {
 
       {/* Bottom Left Identity Tag */}
       <div className="room-signature">
-        <h1 className="room-sig-name">AJAY</h1>
+        <h1 className="room-sig-name">AJAY SINGH</h1>
         <div className="room-sig-meta">
           <span className="room-sig-dot" />
-          <span>FULL STACK DEVELOPER · OPEN TO WORK</span>
+          <span>MERN STACK &amp; BACKEND DEVELOPER · OPEN TO WORK</span>
         </div>
       </div>
 
-      {/* Bottom Center Floating Navigation Dock */}
+      {/* Bottom Center Floating Navigation Dock (shown at home and for non-full views) */}
       {!isFullInRoomView && (
         <div className="room-dock-wrap">
           <nav className="room-dock" aria-label="Room Navigation Dock">
@@ -275,7 +366,11 @@ export default function DeveloperRoom() {
                   type="button"
                   className={`room-dock-item ${isActive ? 'active' : ''}`}
                   onClick={() => {
-                    setActiveSection(isActive ? null : sec)
+                    if (isActive) {
+                      flyBackToRoom()
+                    } else {
+                      flyToSection(sec)
+                    }
                   }}
                 >
                   <span className="dock-num">0{idx + 1}</span>
@@ -288,17 +383,63 @@ export default function DeveloperRoom() {
       )}
 
       {/* ===================================================================
-          INTERACTIVE DOCKED VIEWS (About, Contact, Music)
+          INTERACTIVE IN-ROOM VIEWS (Orchestrated by Camera Flight)
           =================================================================== */}
-      <AnimatePresence>
-        {activeSection !== null && !isFullInRoomView && (
+
+      {/* ── Wall Pegboard Experience (Badges on right wall) ── */}
+      <AnimatePresence mode="wait">
+        {displayedSection === 'experience' && (
+          <WallPegboardExperience
+            key="experience"
+            onClose={flyBackToRoom}
+            onNavigateSection={flyToSection}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Desktop Workstation Projects (Curved Ultrawide Monitor) ── */}
+      <AnimatePresence mode="wait">
+        {displayedSection === 'projects' && (
+          <WorkstationProjects
+            key="projects"
+            onClose={flyBackToRoom}
+            onNavigateSection={flyToSection}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Desk Smartphone Contact (Modern Mobile OS Device) ── */}
+      <AnimatePresence mode="wait">
+        {displayedSection === 'contact' && (
+          <SmartphoneContact
+            key="contact"
+            onClose={flyBackToRoom}
+            onNavigateSection={flyToSection}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── About Dossier Experience (Terminal Station on Desk) ── */}
+      <AnimatePresence mode="wait">
+        {displayedSection === 'about' && (
+          <AboutDossierExperience
+            key="about"
+            onClose={flyBackToRoom}
+            onNavigateSection={flyToSection}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Lo-Fi Radio Player ── */}
+      <AnimatePresence mode="wait">
+        {displayedSection === 'music' && (
           <>
             <motion.div
               className="docked-surface-backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActiveSection(null)}
+              onClick={flyBackToRoom}
             />
 
             <motion.div
@@ -308,123 +449,45 @@ export default function DeveloperRoom() {
               exit={{ opacity: 0, scale: 0.94, y: 15 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Card Header */}
               <div className="docked-surface-header">
                 <div className="docked-surface-title">
-                  {activeSection === 'about' && '🤖 Developer · About Me'}
-                  {activeSection === 'music' && '🎵 Smart Speaker · Lo-Fi Radio'}
+                  🎵 Smart Speaker · Lo-Fi Radio
                 </div>
                 <button
                   type="button"
                   className="docked-close-btn"
-                  onClick={() => setActiveSection(null)}
+                  onClick={flyBackToRoom}
                   aria-label="Close"
                 >
                   <X size={16} />
                 </button>
               </div>
 
-              {/* Card Body by Section */}
-
-              {activeSection === 'about' && (
-                <div className="flex flex-col gap-4 text-sm text-zinc-300">
-                  <p className="leading-relaxed">
-                    Hey! I&apos;m <strong>Ajay</strong>, a full stack developer dedicated to building
-                    ultra-fast, visually captivating, and resilient web applications. I bridge the gap
-                    between high-fidelity interactive user experiences and rock-solid backend
-                    architecture.
+              <div className="flex flex-col items-center justify-center p-4 text-center gap-3">
+                <Disc3
+                  size={40}
+                  className={`text-pink-400 ${isPlayingAudio ? 'animate-spin' : ''}`}
+                />
+                <div>
+                  <h4 className="font-bold text-white">Lo-Fi Coding Beats Radio</h4>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    {isPlayingAudio
+                      ? 'Now Playing · Chill Synthwave & Lo-Fi Beats'
+                      : 'Muted · Click to start ambient background vibes'}
                   </p>
-                  <p className="leading-relaxed text-zinc-400">
-                    When I&apos;m not writing code or orchestrating microservices, you&apos;ll find me
-                    tweaking developer workflows, experimenting with 3D web graphics, or diving into
-                    AI agent orchestration.
-                  </p>
-                  <div>
-                    <h5 className="font-mono text-xs uppercase tracking-wider text-pink-400 mb-2">
-                      Primary Tech Stack
-                    </h5>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        'React 19',
-                        'TypeScript',
-                        'Next.js',
-                        'Node.js',
-                        'TailwindCSS',
-                        'Python',
-                        'PostgreSQL',
-                        'Framer Motion',
-                        'Docker',
-                      ].map((tech) => (
-                        <span
-                          key={tech}
-                          className="font-mono text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded text-cyan-300"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </div>
-              )}
-
-              {activeSection === 'music' && (
-                <div className="flex flex-col items-center justify-center p-4 text-center gap-3">
-                  <Disc3
-                    size={40}
-                    className={`text-pink-400 ${isPlayingAudio ? 'animate-spin' : ''}`}
-                  />
-                  <div>
-                    <h4 className="font-bold text-white">Lo-Fi Coding Beats Radio</h4>
-                    <p className="text-xs text-zinc-400 mt-1">
-                      {isPlayingAudio
-                        ? 'Now Playing · Chill Synthwave & Lo-Fi Beats'
-                        : 'Muted · Click to start ambient background vibes'}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                    className="mt-2 font-mono text-xs px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 hover:bg-pink-500/30 transition-all"
-                  >
-                    {isPlayingAudio ? 'Pause Music' : 'Play Lo-Fi Radio'}
-                  </button>
-                </div>
-              )}
+                <button
+                  type="button"
+                  onClick={() => setIsPlayingAudio(!isPlayingAudio)}
+                  className="mt-2 font-mono text-xs px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 hover:bg-pink-500/30 transition-all cursor-pointer"
+                >
+                  {isPlayingAudio ? 'Pause Music' : 'Play Lo-Fi Radio'}
+                </button>
+              </div>
             </motion.div>
           </>
-        )}
-      </AnimatePresence>
-
-      {/* ── Wall Pegboard Experience (Exact replica of Image 2) ── */}
-      <AnimatePresence>
-        {activeSection === 'experience' && (
-          <WallPegboardExperience
-            onClose={() => setActiveSection(null)}
-            onNavigateSection={(sec) => setActiveSection(sec)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* ── Desktop Workstation Projects (Curved Ultrawide Monitor) ── */}
-      <AnimatePresence>
-        {activeSection === 'projects' && (
-          <WorkstationProjects
-            onClose={() => setActiveSection(null)}
-            onNavigateSection={(sec) => setActiveSection(sec)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* ── Desk Smartphone Contact (Modern Mobile OS Device) ── */}
-      <AnimatePresence>
-        {activeSection === 'contact' && (
-          <SmartphoneContact
-            onClose={() => setActiveSection(null)}
-            onNavigateSection={(sec) => setActiveSection(sec)}
-          />
         )}
       </AnimatePresence>
     </div>
   )
 }
-

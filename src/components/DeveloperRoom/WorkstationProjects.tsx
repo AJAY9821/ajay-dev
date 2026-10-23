@@ -53,236 +53,270 @@ export interface ProjectData {
 
 const PROJECTS_DATA: ProjectData[] = [
   {
-    id: 'edi',
-    title: 'EDI — Local AI Spreadsheet',
-    fileName: 'edi_engine.tsx',
-    fileLang: 'tsx',
-    tagline: 'Private, in-memory AI spreadsheet running 100% locally with zero cloud data egress.',
-    whyBuilt:
-      'Analysts deal with multi-gigabyte confidential financial sheets and cannot paste company data into cloud AI services. EDI brings in-memory DuckDB and local Ollama models directly to the user machine.',
-    architectureWins: [
-      'Stateless FastAPI engine rebuilds in-memory SQLite/DuckDB on cache hash in <15ms.',
-      'Natural-language-to-SQL compiler handles multi-table joins and data cleaning turns.',
-      'Interactive Recharts visualizer streams chart objects directly to client canvas.',
-    ],
-    metrics: [
-      { label: 'Cloud Data Leakage', value: '0 bytes (100% Local)' },
-      { label: '500k-Row Query Latency', value: '< 38ms' },
-      { label: 'Memory Footprint', value: '84MB RAM' },
-    ],
-    tags: ['React 19', 'TypeScript', 'DuckDB', 'Ollama', 'FastAPI', 'Recharts'],
-    githubUrl: 'https://github.com',
-    demoUrl: 'https://github.com',
-    codeSnippet: `import { DuckDBClient } from '@duckdb/wasm'
-import { OllamaLocalLLM } from 'ollama-node'
-
-export class LocalSpreadsheetEngine {
-  private db: DuckDBClient
-  private llm: OllamaLocalLLM
-
-  constructor() {
-    this.db = new DuckDBClient({ inMemory: true })
-    this.llm = new OllamaLocalLLM({ model: 'qwen2.5-coder:7b' })
-  }
-
-  async queryNaturalLanguage(sheetData: Row[], prompt: string): Promise<QueryResult> {
-    // 1. Hash & register virtual table in memory
-    const tableHash = await this.db.registerTable('active_sheet', sheetData)
-    
-    // 2. Compile user intent to verified SQL without external cloud API
-    const sql = await this.llm.generateSQL(prompt, { schema: tableHash.schema })
-    
-    // 3. Sub-40ms execution on local CPU threads
-    const results = await this.db.query(sql)
-    return { data: results, sql, rowsProcessed: sheetData.length }
-  }
-}`,
-    terminalLogs: [
-      '$ git clone https://github.com/ajay/edi && cd edi',
-      '$ npm install && ollama run qwen2.5-coder:7b',
-      '[EDI-CORE] Loading in-memory DuckDB WASM instance...',
-      '[EDI-CORE] DuckDB v1.1 initialized in 12ms.',
-      '[OLLAMA] Local model qwen2.5-coder:7b ready on port 11434.',
-      '[CLIENT] Mounted React 19 sheet viewport with 500,000 cells.',
-      '[QUERY] "Plot monthly net margin by region for Q3"',
-      '[SQL] SELECT region, SUM(revenue - cost) as net_margin FROM active_sheet GROUP BY region;',
-      '[RESULT] 4 rows returned in 28ms. Chart rendered.',
-    ],
-  },
-  {
-    id: 'mentora',
-    title: 'Mentora — Local AI Code Tutor',
-    fileName: 'mentora_agent.py',
-    fileLang: 'py',
-    tagline: 'Algorithmic and full-stack code tutor that adapts pacing, tracks mistake patterns, and drills weak spots.',
-    whyBuilt:
-      'AI code generation can lead to passive learning. Mentora flips the script: it enforces active recall, evaluates learner test cases, and dynamically adjusts drill difficulty without leaking learner progress.',
-    architectureWins: [
-      'Dual-tier model architecture: Claude Code for complex AST parsing with Ollama fallback.',
-      'Deterministic sandbox evaluation runs learner code in isolated WebAssembly micro-containers.',
-      'Spaced repetition engine schedules syntax and algorithmic reviews on SQLite vector store.',
-    ],
-    metrics: [
-      { label: 'Evaluation Speed', value: 'sub-60ms' },
-      { label: 'Curriculum Depth', value: '13 Mastery Phases' },
-      { label: 'Offline Mode', value: 'Fully Functional' },
-    ],
-    tags: ['Next.js', 'Python', 'LiteLLM', 'WebAssembly', 'SQLite', 'TailwindCSS'],
-    githubUrl: 'https://github.com',
-    demoUrl: 'https://github.com',
-    codeSnippet: `from litellm import completion
-import wasmtime
-
-class CodeTutorAgent:
-    def __init__(self, learner_id: str, local_mode: bool = True):
-        self.learner_id = learner_id
-        self.model = "ollama/llama3.2:3b" if local_mode else "claude-3-5-sonnet"
-        self.sandbox = wasmtime.Store()
-
-    async def evaluate_submission(self, code: str, test_suite: list) -> dict:
-        """Run student code inside isolated WASM sandbox with strict timeout."""
-        exec_result = self.sandbox.execute(code, test_suite, timeout_ms=250)
-        
-        if not exec_result.passed:
-            # Diagnose specific algorithmic anti-patterns rather than giving raw answers
-            diagnosis = await completion(
-                model=self.model,
-                messages=[{"role": "user", "content": f"Guide without spoiling: {exec_result.diff}"}],
-                temperature=0.2
-            )
-            return {"status": "retry", "hint": diagnosis.choices[0].message.content}
-            
-        return {"status": "mastered", "xp": 100, "next_topic": "dynamic_programming_2"}`,
-    terminalLogs: [
-      '$ python -m mentora --user ajay --topic dynamic_programming',
-      '[TUTOR] Initializing local spaced repetition graph...',
-      '[SANDBOX] WebAssembly runner booted in 8ms.',
-      '[EXERCISE] Phase 4: Longest Increasing Subsequence (O(n log n))',
-      '[SUBMISSION] Received 42 lines of Python solution.',
-      '[TESTS] Running 15 test vectors against sandboxed bytecode...',
-      '[PASS] 15/15 assertions passed in 18ms.',
-      '[ANALYSIS] Time complexity verified: O(n log n). Memory: O(n).',
-      '[PROGRESS] Mastery score updated: 94.2%. Next review in 48 hours.',
-    ],
-  },
-  {
-    id: 'resumewesume',
-    title: 'ResumeWesume — Real-Time AI Editor',
-    fileName: 'resume_compiler.ts',
+    id: 'devtinder',
+    title: 'DevTinder — Developer Networking Platform',
+    fileName: 'connectionController.ts',
     fileLang: 'ts',
-    tagline: 'ATS-validated resume tailoring engine with automated headless Chromium PDF compilation.',
+    tagline: 'MERN stack developer platform for professional networking, connection requests, and real-time chat with JWT auth.',
     whyBuilt:
-      'Applying for jobs requires customizing resumes without breaking formatting or introducing hallucinated credentials. ResumeWesume uses typed schema tools to validate every bullet point before rendering.',
+      'Developers need a dedicated space to connect, review skill profiles, and collaborate on software stacks. DevTinder delivers swiping, matching, secure authentication, and instant messaging.',
     architectureWins: [
-      'AST-based schema parser guarantees zero formatting breakage and 100% ATS readability.',
-      'Automated headless Chromium driver runs on serverless container to produce print-quality PDFs.',
-      'Prompt-injection defense prevents hidden prompt overrides in imported job specifications.',
+      'Secure authentication layer built with stateless JWT tokens, HTTP-only cookies, and bcrypt password hashing.',
+      'Bi-directional real-time chat architecture powered by Socket.io and WebSockets with active presence tracking.',
+      'Automated transactional email notifications dispatched via Amazon SES for connection requests and messages.',
+      'Compound-indexed MongoDB schemas ensuring sub-25ms response times on feed queries and user matching.',
     ],
     metrics: [
-      { label: 'PDF Generation Time', value: '< 1.4s' },
-      { label: 'ATS Score Verification', value: '100% Pass Rate' },
-      { label: 'Model Reasoning Overhead', value: 'Reduced by 88%' },
+      { label: 'Auth Scheme', value: 'JWT + bcrypt' },
+      { label: 'Real-Time Chat', value: '< 20ms Socket.io' },
+      { label: 'Cloud Mail', value: 'Amazon SES' },
     ],
-    tags: ['React', 'Python', 'FastAPI', 'Chromium', 'Tailwind', 'LiteLLM'],
-    githubUrl: 'https://github.com',
-    demoUrl: 'https://github.com',
-    codeSnippet: `import { chromium } from 'playwright-core'
-import { z } from 'zod'
+    tags: ['Node.js', 'Express.js', 'React', 'MongoDB', 'Socket.io', 'JWT', 'Amazon SES', 'WebSockets', 'bcrypt'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    codeSnippet: `import { Router, Request, Response } from 'express'
+import { userAuth } from '../middlewares/auth'
+import { ConnectionRequest } from '../models/connectionRequest'
+import { sendEmail } from '../utils/ses'
 
-const ResumeSchema = z.object({
-  contact: z.object({ name: z.string(), email: z.string().email(), title: z.string() }),
-  experience: z.array(z.object({
-    role: z.string(),
-    company: z.string(),
-    period: z.string(),
-    metrics: z.array(z.string().min(10))
-  }))
-})
+export const requestRouter = Router()
 
-export async function compileATSResume(jsonContent: unknown): Promise<Buffer> {
-  // Validate schema before passing to renderer
-  const validated = ResumeSchema.parse(jsonContent)
-  
-  const browser = await chromium.launch({ headless: true })
-  const page = await browser.newPage()
-  await page.setContent(renderResumeHTML(validated), { waitUntil: 'networkidle' })
-  
-  const pdfBuffer = await page.pdf({
-    format: 'Letter',
-    printBackground: true,
-    margin: { top: '0.4in', bottom: '0.4in', left: '0.45in', right: '0.45in' }
-  })
-  
-  await browser.close()
-  return pdfBuffer
-}`,
+// Send Connection Request (interested / ignored)
+requestRouter.post(
+  '/request/send/:status/:toUserId',
+  userAuth,
+  async (req: Request, res: Response) => {
+    const fromUserId = req.user._id
+    const { status, toUserId } = req.params
+
+    const allowedStatus = ['interested', 'ignored']
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status type' })
+    }
+
+    const existingRequest = await ConnectionRequest.findOne({
+      $or: [
+        { fromUserId, toUserId },
+        { fromUserId: toUserId, toUserId: fromUserId },
+      ],
+    })
+    if (existingRequest) {
+      return res.status(400).json({ message: 'Connection request already exists' })
+    }
+
+    const connectionRequest = new ConnectionRequest({ fromUserId, toUserId, status })
+    const data = await connectionRequest.save()
+
+    // Trigger automated email alert via Amazon SES
+    if (status === 'interested') {
+      await sendEmail(toUserId, \`\${req.user.firstName} sent you a connection request on DevTinder!\`)
+    }
+
+    return res.json({ message: \`Connection \${status} successfully\`, data })
+  }
+)`,
     terminalLogs: [
-      '$ curl -X POST /api/v1/tailor -d @job_description.json',
-      '[ATS-ENGINE] Parsing target job: "Senior Full Stack AI Engineer"...',
-      '[EXTRACTOR] Extracted 8 core competencies & key metrics.',
-      '[DIFF-CHECK] Validating experience bullets against verified career graph...',
-      '[SECURITY] Prompt injection guard: zero untrusted overrides detected.',
-      '[COMPILER] Headless Chromium launched in background.',
-      '[RENDER] Printing vector-sharp PDF with exact typographic hierarchy.',
-      '[DONE] Export generated: ajay_resume_tailored.pdf (142 KB, 1.2s)',
+      '$ git clone https://github.com/AJAY9821/devtinder && npm run dev',
+      '[DEV-TINDER] MongoDB Replica Set connected at mongodb://127.0.0.1:27017/devtinder',
+      '[AUTH] JWT authentication middleware initialized with 256-bit secret.',
+      '[SOCKET] Socket.io server mounted on port 7777 (transport: websocket).',
+      '[AMAZON-SES] Cloud mail transport verified: region=ap-south-1.',
+      '[CLIENT] React 19 SPA mounted with TailwindCSS responsive layout.',
+      '[TEST] POST /request/send/interested/65f12a... -> 200 OK (18ms).',
+      '[NOTIFY] Amazon SES email queued & dispatched successfully.',
     ],
   },
   {
-    id: 'pulseengine',
-    title: 'PulseEngine — Real-Time CV Threat Engine',
-    fileName: 'edge_detector.py',
-    fileLang: 'py',
-    tagline: 'Sub-second real-time computer vision threat detection deployed on distributed edge Kubernetes clusters.',
+    id: 'music-stream',
+    title: 'Music Streaming Application',
+    fileName: 'musicController.ts',
+    fileLang: 'ts',
+    tagline: 'Full-stack audio streaming service featuring cloud media ingestion, album management, and RBAC authorization.',
     whyBuilt:
-      'Manual security video monitoring is error-prone and labor intensive. PulseEngine runs lightweight YOLO models on edge cameras, dispatching instant push alerts over WebSockets and Pushover API.',
+      'Built to provide smooth audio playback with cloud-hosted media assets, secure artist upload workflows, and role-based permissions separating listeners from content creators.',
     architectureWins: [
-      'Edge-optimized YOLOv8 model quantized to INT8 runs at 45 FPS on edge hardware.',
-      'Event-driven instant alert pipeline over WebSockets, replacing legacy polling.',
-      'Fault-tolerant deployment orchestrated on k3s lightweight Kubernetes clusters.',
+      'Streamlined media ingestion pipeline combining Multer multipart handling and ImageKit CDN for optimized streaming.',
+      'Granular Role-Based Access Control (RBAC) allowing admins/artists to manage tracks, albums, and playlists.',
+      'RESTful API design with Mongoose schemas featuring sub-document indexing for fast search and stream requests.',
+      'JWT token verification protecting user library modifications and album creation routes.',
     ],
     metrics: [
-      { label: 'Inference Latency', value: '22ms / Frame' },
-      { label: 'False Positive Drop', value: '65% Reduction' },
-      { label: 'Frame Rate', value: '45+ FPS Edge' },
+      { label: 'Media CDN', value: 'ImageKit Cloud' },
+      { label: 'Upload Pipeline', value: 'Multer + Buffer' },
+      { label: 'Auth Scheme', value: 'Role-Based JWT' },
     ],
-    tags: ['Python', 'YOLOv8', 'FastAPI', 'WebSockets', 'Kubernetes', 'OpenCV'],
-    githubUrl: 'https://github.com',
-    demoUrl: 'https://github.com',
-    codeSnippet: `import cv2
-from ultralytics import YOLO
-import asyncio
-import websockets
+    tags: ['Node.js', 'Express.js', 'MongoDB', 'React', 'ImageKit', 'Multer', 'JWT', 'Mongoose'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    codeSnippet: `import { Router, Request, Response } from 'express'
+import multer from 'multer'
+import { imagekit } from '../config/imagekit'
+import { Track } from '../models/trackModel'
+import { verifyArtistRole } from '../middlewares/rbac'
 
-class EdgeThreatEngine:
-    def __init__(self, weights_path: str = "models/yolov8n-quantized.onnx"):
-        # Load edge-quantized ONNX runtime model for sub-30ms frame inference
-        self.model = YOLO(weights_path, task="detect")
-        self.active_subscribers = set()
+const upload = multer({ storage: multer.memoryStorage() })
+export const trackRouter = Router()
 
-    async def process_stream(self, rtsp_stream_url: str):
-        cap = cv2.VideoCapture(rtsp_stream_url)
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-                
-            # Perform edge detection
-            results = self.model.predict(source=frame, conf=0.72, verbose=False)
-            anomalies = [box for box in results[0].boxes if box.cls in [0, 2]]
-            
-            if anomalies:
-                alert_payload = {"timestamp": cv2.getTickCount(), "threat_count": len(anomalies)}
-                # Fan out over WebSockets to monitoring dashboards
-                await asyncio.gather(*[ws.send(str(alert_payload)) for ws in self.active_subscribers])`,
+// Upload audio track to ImageKit and persist metadata in MongoDB
+trackRouter.post(
+  '/tracks/upload',
+  verifyArtistRole,
+  upload.single('audioFile'),
+  async (req: Request, res: Response) => {
+    if (!req.file) return res.status(400).json({ error: 'Audio file is required' })
+
+    // Stream buffer directly to ImageKit CDN
+    const uploadResponse = await imagekit.upload({
+      file: req.file.buffer,
+      fileName: \`track_\${Date.now()}_\${req.file.originalname}\`,
+      folder: '/music-app/tracks',
+    })
+
+    const track = new Track({
+      title: req.body.title,
+      artist: req.user._id,
+      album: req.body.albumId,
+      audioUrl: uploadResponse.url,
+      duration: req.body.duration,
+    })
+    await track.save()
+
+    return res.status(201).json({ message: 'Track published successfully', track })
+  }
+)`,
     terminalLogs: [
-      '$ k3s kubectl get pods -n edge-inference',
-      'NAME                            READY   STATUS    RESTARTS   AGE',
-      'pulse-engine-worker-7b9c9-x8j   1/1     Running   0          4d12h',
-      '[STREAM] Connected to RTSP stream 10.0.4.12:554/live.sdp',
-      '[INFERENCE] Quantized ONNX model loaded on edge TensorRT accelerator.',
-      '[STATS] Processing 45 FPS · Frame latency: 21.8ms.',
-      '[EVENT] Anomaly detected: unauthorized access in zone B (confidence: 0.94)',
-      '[ALERT] WebSocket broadcast dispatched to 14 clients in 3ms.',
+      '$ npm run dev:music-api',
+      '[MUSIC-STREAM] Server listening on http://localhost:5000',
+      '[DATABASE] MongoDB connection established via Mongoose ODM.',
+      '[STORAGE] ImageKit CDN connected with public endpoint initialized.',
+      '[SECURITY] JWT verification enabled with Role-Based Access Control (RBAC).',
+      '[STREAM] Upload request received: "track_04_ambient.mp3" (8.4MB).',
+      '[IMAGEKIT] Direct memory buffer uploaded to /music-app/tracks in 142ms.',
+      '[DATABASE] Track document saved with indexed title and artist fields.',
+    ],
+  },
+  {
+    id: 'hrms-payroll',
+    title: 'HRMS — Enterprise Payroll & Leave Platform',
+    fileName: 'payrollEngine.ts',
+    fileLang: 'ts',
+    tagline: 'Enterprise Human Resource platform automating end-to-end payroll computation, payslip distribution, and leave approvals.',
+    whyBuilt:
+      'Replaced error-prone manual spreadsheet payroll processing with an automated calculation engine and multi-level leave tracking for employees, managers, and HR admins at ProBey Services.',
+    architectureWins: [
+      'Automated payroll calculation engine accounting for deductions, tax brackets, and attendance records.',
+      'Multi-tier approval state machine for leave requests with instant balance deduction.',
+      'Role-based dashboards delivering custom filtered analytics for employees, managers, and HR admins.',
+      'Modular RESTful architecture supporting seamless integration with employee master data.',
+    ],
+    metrics: [
+      { label: 'Payroll Processing', value: '100% Automated' },
+      { label: 'Approval Speed', value: 'Real-Time Sync' },
+      { label: 'Database', value: 'Indexed MongoDB' },
+    ],
+    tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'REST API', 'RBAC'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    codeSnippet: `import { Router, Request, Response } from 'express'
+import { verifyHRAdmin } from '../middlewares/rbac'
+import { Employee } from '../models/employee'
+import { Payslip } from '../models/payslip'
+
+export const payrollRouter = Router()
+
+// Compute monthly payroll batch and generate payslips
+payrollRouter.post('/payroll/compute-batch', verifyHRAdmin, async (req: Request, res: Response) => {
+  const { month, year } = req.body
+  const activeEmployees = await Employee.find({ status: 'ACTIVE' }).populate('leaveBalance')
+
+  const payslips = activeEmployees.map((emp) => {
+    const grossSalary = emp.baseSalary + (emp.allowances || 0)
+    const unpaidLeaves = emp.unpaidLeavesThisMonth || 0
+    const perDayDeduction = (emp.baseSalary / 30) * unpaidLeaves
+    const taxDeduction = grossSalary > 50000 ? grossSalary * 0.1 : 0
+    const netSalary = Math.round(grossSalary - perDayDeduction - taxDeduction)
+
+    return {
+      employeeId: emp._id,
+      month,
+      year,
+      grossSalary,
+      deductions: Math.round(perDayDeduction + taxDeduction),
+      netSalary,
+      status: 'PROCESSED',
+    }
+  })
+
+  await Payslip.insertMany(payslips)
+  return res.json({ message: \`Processed payroll for \${payslips.length} employees\`, totalProcessed: payslips.length })
+})`,
+    terminalLogs: [
+      '$ npm run hrms:start',
+      '[HRMS-CORE] Enterprise HR service online.',
+      '[RBAC] Role permissions loaded: Employee, Manager, HR Admin.',
+      '[PAYROLL] Initializing monthly automated salary computation...',
+      '[LEAVE] Syncing approved leaves against monthly attendance ledger.',
+      '[CALC] Batch processing 124 employee records...',
+      '[BATCH] 124 payslips generated with tax/deduction algorithms in 64ms.',
+      '[DASHBOARD] Real-time KPI charts broadcast to HR Admin portals.',
+    ],
+  },
+  {
+    id: 'career-portal',
+    title: 'AI Resume Parser & Career Portal',
+    fileName: 'resumeParser.ts',
+    fileLang: 'ts',
+    tagline: 'Automated candidate ingestion pipeline with AI document parsing, structured talent indexing, and high-concurrency job APIs.',
+    whyBuilt:
+      'Accelerated technical recruiting at ProBey Services by leveraging Google API to parse unstructured resumes into queryable candidate profiles with optimized search.',
+    architectureWins: [
+      'AI document parsing pipeline using Google API to extract skills, experience, and education from candidate PDFs.',
+      'MongoDB schema indexing and query optimization keeping query latency low under high applicant volumes.',
+      'Server-side caching layer buffering frequent job listings and candidate search filters.',
+      'End-to-end RESTful APIs supporting job postings, applicant tracking, and recruiter hiring stages.',
+    ],
+    metrics: [
+      { label: 'AI Extraction', value: 'Google API' },
+      { label: 'Query Latency', value: '< 40ms Optimized' },
+      { label: 'Data Model', value: 'Schema Indexed' },
+    ],
+    tags: ['Node.js', 'Express.js', 'Google API', 'MongoDB', 'React', 'Caching'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    codeSnippet: `import { Router, Request, Response } from 'express'
+import multer from 'multer'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import { CandidateProfile } from '../models/candidate'
+
+const upload = multer({ storage: multer.memoryStorage() })
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!)
+export const careerRouter = Router()
+
+careerRouter.post('/parse-resume', upload.single('resumePdf'), async (req: Request, res: Response) => {
+  if (!req.file) return res.status(400).json({ error: 'Resume PDF required' })
+
+  // Send document buffer to Google API with structured schema instructions
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const prompt = 'Extract candidate name, contact, skills array, experience list, and education into valid JSON.'
+
+  const result = await model.generateContent([
+    { inlineData: { data: req.file.buffer.toString('base64'), mimeType: 'application/pdf' } },
+    prompt,
+  ])
+
+  const parsedData = JSON.parse(result.response.text())
+  const profile = await CandidateProfile.create(parsedData)
+  return res.status(201).json({ message: 'Resume parsed and indexed', profile })
+})`,
+    terminalLogs: [
+      '$ npm run career:server',
+      '[CAREER-PORTAL] Recruitment platform running on port 8080.',
+      '[AI-PIPELINE] Google API authenticated for candidate resume ingestion.',
+      '[MONGODB] Compound indexes initialized: { skills: 1, experienceYears: -1 }.',
+      '[UPLOAD] Incoming applicant resume: "Ajay_Singh_Resume.pdf"',
+      '[AI-EXTRACTION] Google API parsed: 14 skills, 2 degrees, 1 year experience in 820ms.',
+      '[INDEX] Candidate structured profile created and cached.',
+      '[API] 201 Created: Candidate ready for recruiter evaluation.',
     ],
   },
 ]
@@ -339,7 +373,7 @@ export default function WorkstationProjects({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* ── Top Bar: Back to Room & Section Hint ── */}
       <div className="workstation-top-bar">
@@ -367,10 +401,10 @@ export default function WorkstationProjects({
 
         <motion.div
           className="workstation-monitor-screen"
-          initial={{ scale: 0.92, opacity: 0, y: 15 }}
+          initial={{ scale: 0.96, opacity: 0, y: 10 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.92, opacity: 0, y: 15 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ scale: 0.96, opacity: 0, y: 10 }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Top Window Chrome (Traffic Lights, Tabs, Search) */}
           <div className="monitor-chrome-header">
