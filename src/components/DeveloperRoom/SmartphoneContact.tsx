@@ -124,12 +124,12 @@ export default function SmartphoneContact({
           onClick={onClose}
           aria-label="Back to the room"
         >
-          <ArrowLeft size={15} /> BACK TO THE ROOM [ESC]
+          <ArrowLeft size={14} /> BACK TO THE ROOM [ESC]
         </button>
 
         <div className="smartphone-status-pill">
           <span className="smartphone-pulse-dot" />
-          <span className="font-mono text-xs uppercase tracking-wider text-pink-300">
+          <span className="smartphone-status-text">
             Smartphone · Desk Connect
           </span>
         </div>
