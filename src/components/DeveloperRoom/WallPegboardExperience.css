@@ -279,13 +279,21 @@
   width: 218px;
   height: 320px;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
   margin-top: -2px;
-  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.7));
 }
 
 .peg-card-flipper.flipped {
   transform: rotateY(180deg);
+}
+
+.peg-card-flipper.flipped .peg-card-back {
+  z-index: 5;
+}
+
+.peg-card-flipper.flipped .peg-card-front {
+  z-index: 1;
 }
 
 /* Card Cutout Slot for Clip */
@@ -293,13 +301,14 @@
   position: absolute;
   top: 7px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(2px);
   width: 42px;
   height: 5px;
   background: #080911;
   border-radius: 9999px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
   z-index: 10;
+  pointer-events: none;
 }
 
 /* Card Faces */
@@ -313,21 +322,28 @@
   border-radius: 10px;
   background-color: #ffffff;
   color: #0f172a;
-  overflow: hidden;
   box-shadow: 
     0 16px 36px rgba(0, 0, 0, 0.65),
     0 2px 8px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
 /* ── FRONT FACE ── */
 .peg-card-front {
   justify-content: space-between;
+  transform: rotateY(0deg) translateZ(1px);
+  -webkit-transform: rotateY(0deg) translateZ(1px);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  z-index: 2;
 }
 
 .peg-card-band {
   height: 72px;
+  border-radius: 10px 10px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -417,33 +433,45 @@
 
 /* ── BACK FACE ON 3D FLIP ── */
 .peg-card-back {
-  transform: rotateY(180deg);
-  padding: 20px 14px 10px 14px;
+  transform: rotateY(180deg) translateZ(1px);
+  -webkit-transform: rotateY(180deg) translateZ(1px);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: 18px 13px 8px 13px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #ffffff;
+  z-index: 1;
+}
+
+.peg-back-header {
+  display: flex;
+  flex-direction: column;
 }
 
 .peg-back-company {
   font-family: var(--font-sans, sans-serif);
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
 .peg-back-role {
   font-family: var(--font-sans, sans-serif);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #334155;
-  margin-top: 2px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+  margin-top: 1px;
 }
 
 .peg-back-date {
   font-family: var(--font-mono, monospace);
-  font-size: 0.58rem;
+  font-size: 0.54rem;
+  font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -451,10 +479,29 @@
 }
 
 .peg-back-divider {
-  width: 22px;
-  height: 3px;
+  width: 24px;
+  height: 2.5px;
   border-radius: 1.5px;
   margin: 4px 0 6px 0;
+}
+
+.peg-back-tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5px;
+  margin-bottom: 6px;
+}
+
+.peg-back-tech-chip {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: #334155;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 1.5px 5px;
+  border-radius: 3px;
+  line-height: 1.2;
 }
 
 .peg-back-bullets {
@@ -463,36 +510,36 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .peg-back-bullet {
-  font-size: 0.68rem;
-  line-height: 1.4;
+  font-size: 0.62rem;
+  line-height: 1.35;
   color: #334155;
   position: relative;
-  padding-left: 10px;
+  padding-left: 9px;
   text-align: left;
 }
 
 .peg-back-bullet::before {
-  content: '▪';
+  content: '▸';
   position: absolute;
   left: 0;
-  color: #e11d48;
-  font-size: 0.8rem;
-  line-height: 1;
+  color: var(--bullet-color, #e11d48);
+  font-size: 0.66rem;
+  line-height: 1.35;
 }
 
 .peg-back-flip {
   font-family: var(--font-mono, monospace);
-  font-size: 0.56rem;
+  font-size: 0.55rem;
   font-weight: 700;
   color: #94a3b8;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-align: center;
-  margin-top: 4px;
+  padding-top: 4px;
 }
 
 /* ── PEGBOARD ORGANIZER SHELF (Matching room render) ── */

@@ -12,6 +12,7 @@ export interface WallCardData {
   accentColor: string
   barcodeId: string
   bullets: string[]
+  tech?: string[]
 }
 
 const EXPERIENCE_CARDS: WallCardData[] = [
@@ -23,11 +24,12 @@ const EXPERIENCE_CARDS: WallCardData[] = [
     strapColor: '#b91c1c', // Crimson Red
     accentColor: '#dc2626',
     barcodeId: '984021948201',
+    tech: ['Node.js', 'Express', 'React', 'MongoDB', 'REST APIs'],
     bullets: [
-      'Designed and developed the Payroll Management module end-to-end, automating salary computation, deductions, and payslip generation.',
-      'Built Leave Management module covering leave application, multi-level approval workflows, and real-time leave balance tracking.',
-      'Implemented role-based dashboards so employees, managers, and HR admins each get tailored views and permissions.',
-      'Worked closely with HR stakeholders to translate business requirements into scalable backend logic and clean REST APIs.',
+      'Engineered Payroll Management module end-to-end, automating salary computation, deductions, & payslips.',
+      'Built Leave Management system with multi-level approval workflows & real-time leave-balance tracking.',
+      'Implemented role-based dashboards (RBAC) giving tailored views for employees, managers, & HR admins.',
+      'Designed scalable backend architecture with clean, maintainable REST APIs & compound-indexed pipelines.',
     ],
   },
   {
@@ -38,11 +40,12 @@ const EXPERIENCE_CARDS: WallCardData[] = [
     strapColor: '#005953', // Deep Teal
     accentColor: '#0d9488',
     barcodeId: '849204918231',
+    tech: ['Google API', 'Node.js', 'Express', 'MongoDB', 'Caching'],
     bullets: [
-      'Built AI-powered resume parsing pipeline using Google API, extracting candidate skills, experience, and education into structured recruiter profiles.',
-      'Analyzed and optimized MongoDB schemas, indexes, and query patterns to reduce response times under increasing data volume.',
-      'Developed RESTful APIs supporting job postings, candidate applications, and recruiter workflows across the platform.',
-      'Applied caching and query optimization techniques to keep platform responsive as candidate and job-listing volume expanded.',
+      'Built AI-powered resume parsing pipeline with Google API, extracting candidate skills into recruiter profiles.',
+      'Optimized MongoDB schemas, compound indexes, & query patterns to reduce latency under heavy data volume.',
+      'Developed RESTful APIs supporting job postings, applicant tracking, and recruiter workflows.',
+      'Applied caching & query optimizations to keep portal performant as candidate and listing database scaled.',
     ],
   },
   {
@@ -53,10 +56,11 @@ const EXPERIENCE_CARDS: WallCardData[] = [
     strapColor: '#18181b', // Dark Charcoal
     accentColor: '#eab308',
     barcodeId: '749102849102',
+    tech: ['React.js', 'JavaScript (ES6+)', 'HTML5', 'CSS3', 'REST APIs'],
     bullets: [
-      'Built interactive, responsive frontend interfaces in React, converting UI/UX designs into reusable component-based architecture.',
-      'Ensured seamless cross-device responsiveness and sub-second render speeds across all core workflow views.',
-      'Coordinated with designers and backend engineers to integrate frontend components with REST APIs for seamless end-to-end flow.',
+      'Built interactive, responsive frontend in React, converting UI/UX designs into modular component architecture.',
+      'Ensured sub-second render speeds and cross-device responsiveness across all enterprise workflow views.',
+      'Integrated React frontend components with backend REST APIs ensuring seamless end-to-end data flow.',
     ],
   },
   {
@@ -67,10 +71,11 @@ const EXPERIENCE_CARDS: WallCardData[] = [
     strapColor: '#1d4ed8', // Royal Blue
     accentColor: '#3b82f6',
     barcodeId: '650192849182',
+    tech: ['MERN Stack', 'DSA', 'System Design', 'WebSockets'],
     bullets: [
-      'Master of Computer Applications (MCA) completed with 7.1 CGPA specializing in Software Architecture and Full Stack Development.',
+      'Master of Computer Applications (MCA) completed with 7.1 CGPA specializing in Software Architecture.',
       'Deep focus on Data Structures & Algorithms, Advanced Database Optimization, and System Design.',
-      'Developed multiple production-ready full-stack applications with MERN stack, WebSockets, and Cloud APIs.',
+      'Developed production-ready MERN stack apps with WebSockets, JWT auth, and cloud workflows.',
     ],
   },
   {
@@ -81,10 +86,11 @@ const EXPERIENCE_CARDS: WallCardData[] = [
     strapColor: '#6d28d9', // Deep Purple
     accentColor: '#8b5cf6',
     barcodeId: '540192837492',
+    tech: ['Java (Core)', 'C++', 'Data Structures', 'SQL'],
     bullets: [
-      'Bachelor of Computer Applications completed with 7.1 CGPA.',
-      'Strong academic and practical grounding in Object-Oriented Programming (Java, C++), Data Structures, and Relational Databases.',
-      'Built academic projects focused on web technologies and algorithmic problem solving.',
+      'Bachelor of Computer Applications (BCA) completed with 7.1 CGPA.',
+      'Strong academic & practical foundation in OOP (Java, C++), Data Structures, Algorithms, and DBMS.',
+      'Built academic web projects and solved algorithmic problem sets.',
     ],
   },
 ]
@@ -375,7 +381,7 @@ export default function WallPegboardExperience({
 
                     {/* BACK FACE (EXPERIENCE BULLETS) */}
                     <div className="peg-card-face peg-card-back">
-                      <div>
+                      <div className="peg-back-header">
                         <h4
                           className="peg-back-company"
                           style={{ color: card.strapColor }}
@@ -389,9 +395,23 @@ export default function WallPegboardExperience({
                           style={{ backgroundColor: card.strapColor }}
                         />
 
+                        {card.tech && (
+                          <div className="peg-back-tech-chips">
+                            {card.tech.map((t) => (
+                              <span key={t} className="peg-back-tech-chip">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
                         <ul className="peg-back-bullets">
                           {card.bullets.map((bullet, bIdx) => (
-                            <li key={bIdx} className="peg-back-bullet">
+                            <li
+                              key={bIdx}
+                              className="peg-back-bullet"
+                              style={{ ['--bullet-color' as any]: card.strapColor }}
+                            >
                               {bullet}
                             </li>
                           ))}

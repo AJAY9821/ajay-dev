@@ -312,21 +312,7 @@ export default function DeveloperRoom() {
             }`}
           />
 
-          {/* Subtle Miniature Badge Preview on Room Pegboard */}
-          {!isFullInRoomView && (
-            <div
-              className="wall-lanyards-preview"
-              onClick={(e) => {
-                e.stopPropagation()
-                flyToSection('experience')
-              }}
-              title="Click to inspect Work Experience Badges"
-            >
-              <div className="wall-preview-strap" style={{ backgroundColor: '#b91c1c' }} />
-              <div className="wall-preview-strap" style={{ backgroundColor: '#005953' }} />
-              <div className="wall-preview-strap" style={{ backgroundColor: '#18181b' }} />
-            </div>
-          )}
+
 
           {/* Interactive Floating Diamond Hotspots */}
           {activeSection === null &&
@@ -374,7 +360,7 @@ export default function DeveloperRoom() {
       {!isFullInRoomView && (
         <div className="room-dock-wrap">
           <nav className="room-dock" aria-label="Room Navigation Dock">
-            {(['projects', 'experience', 'about', 'contact'] as SectionKey[]).map((sec, idx) => {
+            {(['projects', 'experience', 'about', 'contact'] as SectionKey[]).map((sec) => {
               const spot = HOTSPOTS.find((h) => h.key === sec)
               const isActive = activeSection === sec
               return (
@@ -390,7 +376,6 @@ export default function DeveloperRoom() {
                     }
                   }}
                 >
-                  <span className="dock-num">0{idx + 1}</span>
                   <span>{spot?.label}</span>
                 </button>
               )
