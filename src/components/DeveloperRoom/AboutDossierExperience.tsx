@@ -57,12 +57,12 @@ export default function AboutDossierExperience({
           onClick={onClose}
           aria-label="Back to the room"
         >
-          <ArrowLeft size={15} /> BACK TO THE ROOM [ESC]
+          <ArrowLeft size={14} /> BACK TO THE ROOM [ESC]
         </button>
 
         <div className="about-status-pill">
           <span className="about-pulse-dot" />
-          <span className="font-mono text-xs uppercase tracking-wider text-pink-400">
+          <span className="about-status-text">
             Developer Profile · Terminal Station
           </span>
         </div>
@@ -141,7 +141,7 @@ export default function AboutDossierExperience({
               </div>
 
               {/* Education Highlights */}
-              <div className="about-section-label mt-4">
+              <div className="about-section-label mt-2.5">
                 <GraduationCap size={13} />
                 <span>EDUCATION GRAPH</span>
               </div>
@@ -180,7 +180,7 @@ export default function AboutDossierExperience({
                 ))}
               </div>
 
-              <div className="about-section-label mt-4">
+              <div className="about-section-label mt-2.5">
                 <Zap size={13} />
                 <span>ENGINEERING CAPABILITIES</span>
               </div>
@@ -201,7 +201,7 @@ export default function AboutDossierExperience({
               </div>
 
               {/* Profiles Row */}
-              <div className="flex items-center gap-3 mt-4">
+              <div className="flex items-center gap-2.5 mt-2.5">
                 <a
                   href="https://github.com/AJAY9821"
                   target="_blank"

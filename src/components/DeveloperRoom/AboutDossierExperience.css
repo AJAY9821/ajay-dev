@@ -12,7 +12,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 32px 24px 32px;
+  padding: 16px 28px 20px 28px;
+  gap: 14px;
   background: radial-gradient(
     ellipse at 50% 50%,
     rgba(15, 12, 22, 0.4) 0%,
@@ -31,14 +32,18 @@
 /* ── Top Header Bar ── */
 .about-top-bar {
   width: 100%;
-  max-width: 1050px;
+  max-width: 980px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 40;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .about-back-btn {
+  height: 36px;
+  box-sizing: border-box;
   background: rgba(18, 19, 29, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -48,14 +53,16 @@
   font-size: 0.74rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  padding: 8px 18px;
+  padding: 0 18px;
   border-radius: 9999px;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 8px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px rgba(251, 113, 133, 0.2);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
 }
 
 .about-back-btn:hover {
@@ -66,14 +73,30 @@
 }
 
 .about-status-pill {
-  background: rgba(15, 14, 24, 0.82);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(244, 114, 182, 0.25);
+  height: 36px;
+  box-sizing: border-box;
+  background: rgba(18, 19, 29, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(244, 114, 182, 0.4);
   border-radius: 9999px;
-  padding: 6px 14px;
-  display: flex;
+  padding: 0 18px;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px rgba(251, 113, 133, 0.2);
+  white-space: nowrap;
+}
+
+.about-status-text {
+  color: #fb7185;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 .about-pulse-dot {
@@ -83,6 +106,7 @@
   background: #fb7185;
   box-shadow: 0 0 10px rgba(251, 113, 133, 0.9);
   animation: aboutDotGlow 1.8s infinite alternate;
+  flex-shrink: 0;
 }
 
 @keyframes aboutDotGlow {
@@ -93,28 +117,32 @@
 /* ── Center Holographic Dossier Card ── */
 .about-center-wrap {
   width: 100%;
-  max-width: 960px;
+  max-width: 980px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 30;
   margin: auto 0;
+  min-height: 0;
 }
 
 .about-dossier-card {
   position: relative;
   width: 100%;
+  max-height: calc(100vh - 146px);
   background: rgba(12, 12, 20, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
-  padding: 28px 32px;
+  padding: 22px 28px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(244, 114, 182, 0.12);
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  overflow: hidden;
+  gap: 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(251, 113, 133, 0.3) transparent;
 }
 
 .about-card-glow {
@@ -131,17 +159,17 @@
 .about-dossier-header {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding-bottom: 18px;
+  gap: 18px;
+  padding-bottom: 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .about-avatar-wrapper {
   position: relative;
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
-  padding: 3px;
+  width: 66px;
+  height: 66px;
+  border-radius: 15px;
+  padding: 2.5px;
   background: linear-gradient(135deg, #fb7185, #38bdf8);
   flex-shrink: 0;
 }
@@ -150,7 +178,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 13px;
+  border-radius: 12px;
   background: #09090f;
 }
 
@@ -169,7 +197,7 @@
 .about-header-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .about-tag-badge {
@@ -206,12 +234,12 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 7px 11px;
 }
 
 .about-name {
   font-family: var(--font-sans, sans-serif);
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 900;
   letter-spacing: 0.05em;
   color: #ffffff;
@@ -219,7 +247,7 @@
 }
 
 .about-headline {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #00d4ff;
   font-family: var(--font-mono, monospace);
   letter-spacing: 0.02em;
@@ -229,7 +257,7 @@
 .about-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 28px;
+  gap: 22px;
 }
 
 .about-section-label {
@@ -241,19 +269,20 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .about-bio-text {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: #d1d5db;
-  line-height: 1.55;
-  margin-bottom: 10px;
+  line-height: 1.5;
+  margin-bottom: 8px;
 }
 
 .about-bio-text.secondary {
   color: #9ca3af;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
 }
 
 .about-bio-text strong {
@@ -264,15 +293,15 @@
 .about-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .about-stat-box {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 8px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -280,7 +309,7 @@
 
 .about-stat-val {
   font-family: var(--font-mono, monospace);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #38bdf8;
 }
@@ -297,19 +326,19 @@
 .about-tech-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 6px;
 }
 
 .about-tech-chip {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid;
   border-radius: 6px;
-  padding: 4px 9px;
+  padding: 3px 8px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: var(--font-mono, monospace);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #e2e8f0;
   transition: all 0.2s ease;
 }
@@ -329,20 +358,20 @@
 .about-principles-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .about-principle-item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.78rem;
+  padding: 7px 11px;
+  font-size: 0.76rem;
   color: #cbd5e1;
-  line-height: 1.4;
+  line-height: 1.38;
 }
 
 .about-principle-item strong {
@@ -361,6 +390,7 @@
   padding: 4px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(251, 113, 133, 0.15);
   z-index: 40;
+  flex-shrink: 0;
 }
 
 .about-dock-tab {
@@ -408,11 +438,31 @@
     gap: 16px;
   }
   .about-dossier-card {
-    padding: 20px;
-    max-height: 75vh;
+    padding: 18px 20px;
+    max-height: 72vh;
     overflow-y: auto;
   }
   .about-stage {
-    padding: 16px;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .about-top-bar {
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 540px) {
+  .about-status-pill {
+    display: none;
+  }
+  .about-back-btn {
+    height: 32px;
+    padding: 0 14px;
+    font-size: 0.7rem;
+  }
+  .about-dossier-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }

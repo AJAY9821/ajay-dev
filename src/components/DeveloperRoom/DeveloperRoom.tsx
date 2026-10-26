@@ -67,7 +67,7 @@ interface CameraCoordinates {
 
 const CAMERA_TARGETS: Record<string, CameraCoordinates> = {
   idle: {
-    scale: 1.02,
+    scale: 1.08,
     xPercent: 0,
     yPercent: 0,
     rotateX: 0,
@@ -210,8 +210,9 @@ export default function DeveloperRoom() {
       const normalizedY = (clientY / rect.height - 0.5) * 2
 
       gsap.to(stageRef.current, {
-        rotationX: normalizedY * -3.5,
-        rotationY: normalizedX * 5.5,
+        scale: CAMERA_TARGETS.idle.scale,
+        rotationX: normalizedY * -2.8,
+        rotationY: normalizedX * 4.2,
         duration: 0.6,
         ease: 'power1.out',
         overwrite: 'auto',
@@ -225,6 +226,7 @@ export default function DeveloperRoom() {
   const handleMouseLeave = () => {
     if (activeSectionRef.current === null && !isTransitioningRef.current && stageRef.current) {
       gsap.to(stageRef.current, {
+        scale: CAMERA_TARGETS.idle.scale,
         rotationX: 0,
         rotationY: 0,
         duration: 0.7,
@@ -233,6 +235,21 @@ export default function DeveloperRoom() {
       })
     }
   }
+
+  // Ensure stage mounts with overscan scale to cover 100% of viewport without black edges
+  useEffect(() => {
+    if (stageRef.current) {
+      gsap.set(stageRef.current, {
+        scale: CAMERA_TARGETS.idle.scale,
+        xPercent: 0,
+        yPercent: 0,
+        rotationX: 0,
+        rotationY: 0,
+        transformPerspective: 1200,
+        transformOrigin: '50% 50%',
+      })
+    }
+  }, [])
 
   // Keyboard Escape listener
   useEffect(() => {
