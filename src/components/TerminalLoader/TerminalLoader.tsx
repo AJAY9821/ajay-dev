@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import './TerminalLoader.css'
 
@@ -13,17 +13,19 @@ interface LogEntry {
 }
 
 const LOGS: LogEntry[] = [
-  { triggerPct: 8, text: 'dataset: MERN stack, Node.js, Express, React, MongoDB (16 modules)' },
-  { triggerPct: 30, text: 'compiling REST API endpoints & JWT authentication modules', hasCheck: true },
-  { triggerPct: 52, text: 'optimizing MongoDB schemas, Socket.io & Amazon SES pipeline', hasCheck: true },
-  { triggerPct: 75, text: 'loading 3D developer room environment & asset shaders', hasCheck: true },
+  { triggerPct: 6, text: 'dataset: MERN stack, Node.js, Express, React, MongoDB (16 modules)' },
+  { triggerPct: 28, text: 'compiling REST API endpoints & JWT authentication modules', hasCheck: true },
+  { triggerPct: 52, text: 'optimizing MongoDB schemas, Socket.io & enterprise HRMS engine', hasCheck: true },
+  { triggerPct: 76, text: 'loading 3D developer room environment & asset shaders', hasCheck: true },
   { triggerPct: 94, text: 'environment synchronized: Ajay Singh portfolio ready', hasCheck: true },
 ]
 
+const SPINNER_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
 const TOTAL_BLOCKS = 36
 
 export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
   const [progress, setProgress] = useState(0)
+  const [spinnerIdx, setSpinnerIdx] = useState(0)
   const isCompletedRef = useRef(false)
 
   // Skip handler
@@ -44,11 +46,19 @@ export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  // Braille spinner animation
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSpinnerIdx((prev) => (prev + 1) % SPINNER_FRAMES.length)
+    }, 75)
+    return () => clearInterval(timer)
+  }, [])
+
   // Progress animation runner
   useEffect(() => {
     let animationFrameId: number
     const startTime = performance.now()
-    const totalDuration = 2800 // ~2.8s total smooth loader
+    const totalDuration = 2700 // ~2.7s total smooth authentic loader
 
     const updateProgress = (currentTime: number) => {
       const elapsed = currentTime - startTime
@@ -59,10 +69,8 @@ export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
       if (rawPct < 0.8) {
         easedPct = (rawPct / 0.8) * 0.82
       } else if (rawPct < 0.9) {
-        // slight hesitation
         easedPct = 0.82 + ((rawPct - 0.8) / 0.1) * 0.08
       } else {
-        // fast sprint to finish
         easedPct = 0.9 + ((rawPct - 0.9) / 0.1) * 0.1
       }
 
@@ -72,7 +80,6 @@ export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
       if (rawPct < 1) {
         animationFrameId = requestAnimationFrame(updateProgress)
       } else {
-        // Finished
         setTimeout(() => {
           if (!isCompletedRef.current) {
             isCompletedRef.current = true
@@ -86,49 +93,22 @@ export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
     return () => cancelAnimationFrame(animationFrameId)
   }, [onComplete])
 
-  // Generate SVG telemetry loss/latency curve points based on progress
-  const { pathString, dotX, dotY, metricValue } = useMemo(() => {
-    const width = 300
-    const startY = 12
-    const endY = 62
-
-    // Current width drawn based on progress
-    const currentW = Math.max((progress / 100) * width, 2)
-    const points: string[] = []
-
-    const steps = Math.floor(currentW)
-    for (let x = 0; x <= steps; x += 3) {
-      const normalizedX = x / width
-      // Smooth exponential decay curve mimicking neural loss / latency drop
-      const decay = Math.exp(-2.5 * normalizedX)
-      const wobble = Math.sin(normalizedX * 12) * 1.5
-      const y = endY - (endY - startY) * decay + wobble
-      points.push(`${x.toFixed(1)},${y.toFixed(1)}`)
-    }
-
-    const lastX = currentW
-    const normalizedLast = lastX / width
-    const decayLast = Math.exp(-2.5 * normalizedLast)
-    const wobbleLast = Math.sin(normalizedLast * 12) * 1.5
-    const lastY = endY - (endY - startY) * decayLast + wobbleLast
-
-    // Metric reading from 0.840s down to 0.012s
-    const latency = (0.84 * Math.exp(-2.6 * (progress / 100))).toFixed(3)
-
-    return {
-      pathString: points.join(' '),
-      dotX: lastX,
-      dotY: lastY,
-      metricValue: `${latency}s`,
-    }
-  }, [progress])
-
   // Active blocks for progress bar
   const activeBlocks = Math.floor((progress / 100) * TOTAL_BLOCKS)
 
+  // Find currently active log entry
+  let activeLogIdx = -1
+  for (let i = LOGS.length - 1; i >= 0; i--) {
+    if (progress >= LOGS[i].triggerPct) {
+      activeLogIdx = i
+      break
+    }
+  }
+
   // Chunks and throughput dynamic values
   const currentChunk = Math.min(Math.floor((progress / 100) * 142), 142)
-  const throughput = (10.2 + (progress / 100) * 4.8).toFixed(1)
+  const throughput = (11.2 + (progress / 100) * 7.4).toFixed(1)
+  const latency = Math.max(14, Math.round(92 - (progress / 100) * 78))
 
   return (
     <motion.div
@@ -153,80 +133,116 @@ export default function TerminalLoader({ onComplete }: TerminalLoaderProps) {
         Skip <kbd>ESC</kbd>
       </button>
 
-      <div className="terminal-loader-content">
-        {/* Terminal Header Prompt */}
-        <p className="loader-prompt">
-          <span className="loader-prompt-symbol">$</span>
-          <span className="loader-prompt-cmd">npx</span>
-          <span className="loader-prompt-flag">ajay-os</span>
-          <span className="loader-prompt-flag">--profile</span>
-          <span className="loader-prompt-target">fullstack</span>
-          <span className="loader-prompt-flag">--env</span>
-          <span className="loader-prompt-arg">./prod</span>
-        </p>
-
-        {/* Dynamic Telemetry / Curve Chart */}
-        <div className="loader-chart-container">
-          <svg
-            className="loader-chart-svg"
-            viewBox="0 0 300 80"
-            preserveAspectRatio="none"
-          >
-            {pathString && (
-              <polyline
-                className="loader-chart-path"
-                points={pathString}
-              />
-            )}
-            <circle
-              className="loader-chart-dot"
-              cx={dotX}
-              cy={dotY}
-              r="3"
-            />
-          </svg>
-          <div className="loader-chart-axis">
-            <span>build_latency</span>
-            <span className="loader-chart-value">{metricValue}</span>
+      {/* Terminal Window Container */}
+      <div className="terminal-window">
+        {/* Terminal Header Chrome */}
+        <div className="terminal-window-header">
+          <div className="terminal-window-dots">
+            <span className="dot dot-red" />
+            <span className="dot dot-yellow" />
+            <span className="dot dot-green" />
+          </div>
+          <div className="terminal-window-title">
+            ajay@workstation: ~/portfolio — zsh (x86_64)
+          </div>
+          <div className="terminal-window-meta">
+            <span className="terminal-live-dot" />
+            <span className="terminal-live-text">ONLINE</span>
           </div>
         </div>
 
-        {/* Real-time Log Feed */}
-        <div className="loader-logs">
-          {LOGS.map((log, idx) => {
-            if (progress < log.triggerPct) return null
-            return (
-              <div key={idx} className="loader-log-line">
-                <span className="loader-tag-ok">[ OK ]</span>
-                <span className="loader-log-text">{log.text}</span>
-                {log.hasCheck && <span className="loader-log-check">✓</span>}
+        {/* Terminal Window Body */}
+        <div className="terminal-window-body">
+          {/* Command Prompt Line */}
+          <p className="loader-prompt">
+            <span className="loader-prompt-host">ajay@workstation</span>
+            <span className="loader-prompt-colon">:</span>
+            <span className="loader-prompt-path">~</span>
+            <span className="loader-prompt-symbol">$</span>
+            <span className="loader-prompt-cmd">npx</span>
+            <span className="loader-prompt-flag">ajay-os</span>
+            <span className="loader-prompt-flag">--profile</span>
+            <span className="loader-prompt-target">fullstack</span>
+            <span className="loader-prompt-flag">--env</span>
+            <span className="loader-prompt-arg">./prod</span>
+            <span className="loader-prompt-cursor">█</span>
+          </p>
+
+          {/* Real Runtime Telemetry Matrix (Replacing awkward SVG line) */}
+          <div className="loader-matrix-box">
+            <div className="loader-matrix-line border-top">
+              ┌── RUNTIME ENVIRONMENT ─────────────────────────────────────┐
+            </div>
+            <div className="loader-matrix-content">
+              <div className="matrix-row">
+                <span className="matrix-label">TARGET   :</span>
+                <span className="matrix-val-cyan">Ajay Singh · Full Stack & Backend Developer</span>
               </div>
-            )
-          })}
-        </div>
-
-        {/* Live Metrics Ticker */}
-        <p className="loader-ticker">
-          module <span className="loader-ticker-active">{currentChunk}/142</span> ·{' '}
-          <span className="loader-ticker-active">{throughput} MB/s</span> · latency{' '}
-          <span className="loader-ticker-active">{metricValue}</span>
-        </p>
-
-        {/* Segmented Block Progress Bar */}
-        <div className="loader-progress-wrap">
-          <div className="loader-progress-header">
-            <span className="loader-progress-title">
-              {progress >= 100 ? 'SYSTEM READY' : 'BUILDING'}
-            </span>
-            <span className="loader-progress-pct">{progress}%</span>
+              <div className="matrix-row">
+                <span className="matrix-label">CORE     :</span>
+                <span className="matrix-val">Node.js · Express · React 19 · MongoDB · Three.js</span>
+              </div>
+              <div className="matrix-row">
+                <span className="matrix-label">SYSTEM   :</span>
+                <span className="matrix-val-green">Enterprise HRMS · AI Resume Parser · REST APIs · RBAC</span>
+              </div>
+              <div className="matrix-row">
+                <span className="matrix-label">BUILD    :</span>
+                <span className="matrix-val-dim">142/142 modules synchronized · Vite 6.0 production</span>
+              </div>
+            </div>
+            <div className="loader-matrix-line border-bottom">
+              └────────────────────────────────────────────────────────────┘
+            </div>
           </div>
-          <div className="loader-progress-blocks">
-            {Array.from({ length: TOTAL_BLOCKS }).map((_, index) => (
-              <div
-                key={index}
-                className={`loader-block ${index < activeBlocks ? 'filled' : ''}`}
-              />
-            ))}
+
+          {/* Terminal Log Feed with Active Spinner */}
+          <div className="loader-logs">
+            {LOGS.map((log, idx) => {
+              if (progress < log.triggerPct) return null
+              const isRunning = idx === activeLogIdx && progress < 100
+
+              return (
+                <div key={idx} className="loader-log-line">
+                  {isRunning ? (
+                    <>
+                      <span className="loader-spinner">{SPINNER_FRAMES[spinnerIdx]}</span>
+                      <span className="loader-tag-run">[ RUN ]</span>
+                    </>
+                  ) : (
+                    <span className="loader-tag-ok">[ OK ]</span>
+                  )}
+                  <span className="loader-log-text">{log.text}</span>
+                  {!isRunning && log.hasCheck && <span className="loader-log-check">✓</span>}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Live Metrics Ticker */}
+          <p className="loader-ticker">
+            module <span className="loader-ticker-active">{currentChunk}/142</span> ·{' '}
+            <span className="loader-ticker-active">{throughput} MB/s</span> · latency{' '}
+            <span className="loader-ticker-active">{latency}ms</span> · heap{' '}
+            <span className="loader-ticker-active">46.8 MB</span>
+          </p>
+
+          {/* Segmented Block Progress Bar */}
+          <div className="loader-progress-wrap">
+            <div className="loader-progress-header">
+              <span className="loader-progress-title">
+                {progress >= 100 ? 'SYSTEM READY' : 'INITIALIZING WORKSPACE'}
+              </span>
+              <span className="loader-progress-pct">{progress}%</span>
+            </div>
+            <div className="loader-progress-blocks">
+              {Array.from({ length: TOTAL_BLOCKS }).map((_, index) => (
+                <div
+                  key={index}
+                  className={`loader-block ${index < activeBlocks ? 'filled' : ''}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

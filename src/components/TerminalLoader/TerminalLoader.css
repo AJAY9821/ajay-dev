@@ -1,20 +1,22 @@
 /* ==========================================================================
-   TERMINAL BOOTLOADER STYLES
-   Inspired by raomuhammadhamza.tech, tailored for AJAY.DEV (Full Stack Dev)
+   AUTHENTIC DEVELOPER TERMINAL BOOTLOADER
+   Tailored for AJAY.DEV (Full Stack & Backend Developer)
+   Clean, authentic CLI interface without artificial vector lines
    ========================================================================== */
 
 .terminal-loader-overlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background-color: #08080d;
+  background-color: #06070b;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono, 'JetBrains Mono', 'Fira Code', monospace);
   color: #d1d5db;
   overflow: hidden;
   user-select: none;
+  padding: 1.5rem;
 }
 
 /* Subtle CRT Scanlines & Screen Vignette */
@@ -25,12 +27,12 @@
   pointer-events: none;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.45) 50%
+    rgba(0, 0, 0, 0.35) 50%
   ),
-  radial-gradient(ellipse at center, rgba(14, 20, 35, 0.2) 0%, rgba(5, 5, 8, 0.85) 100%);
+  radial-gradient(ellipse at center, rgba(14, 20, 35, 0.25) 0%, rgba(4, 5, 8, 0.9) 100%);
   background-size: 100% 4px, 100% 100%;
   z-index: 10;
-  opacity: 0.75;
+  opacity: 0.65;
 }
 
 /* Skip Button */
@@ -38,7 +40,7 @@
   position: absolute;
   top: 24px;
   right: 28px;
-  z-index: 20;
+  z-index: 30;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #71717a;
@@ -67,44 +69,152 @@
   background: rgba(0, 212, 255, 0.1);
   border-color: rgba(0, 212, 255, 0.35);
   color: #00d4ff;
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.2);
 }
 
-/* Main Container */
-.terminal-loader-content {
+/* ── Realistic Developer Terminal Window ── */
+.terminal-window {
   position: relative;
-  z-index: 15;
-  width: 90%;
-  max-width: 580px;
+  z-index: 20;
+  width: 100%;
+  max-width: 680px;
+  background: rgba(11, 13, 22, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 212, 255, 0.28);
+  border-radius: 12px;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.95),
+    0 0 45px rgba(0, 212, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+/* Terminal Window Header (Chrome) */
+.terminal-window-header {
+  height: 38px;
+  background: rgba(17, 20, 34, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.terminal-window-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-window-dots .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.dot-red {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+.dot-yellow {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.dot-green {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.terminal-window-title {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  font-family: var(--font-mono, monospace);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+}
+
+.terminal-window-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: #34d399;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.terminal-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Terminal Window Content Body */
+.terminal-window-body {
+  padding: 22px 26px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem 0;
+  gap: 1.25rem;
 }
 
 /* Command Prompt Line */
 .loader-prompt {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: #e4e4e7;
   letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.35rem;
+  line-height: 1.5;
+}
+
+.loader-prompt-host {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.loader-prompt-colon {
+  color: #71717a;
+}
+
+.loader-prompt-path {
+  color: #a855f7;
+  font-weight: 600;
 }
 
 .loader-prompt-symbol {
   color: #39ff14;
   font-weight: 700;
-  margin-right: 0.25rem;
+  margin-right: 0.2rem;
   text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
 }
 
 .loader-prompt-cmd {
   color: #f4f4f5;
+  font-weight: 600;
 }
 
 .loader-prompt-flag {
-  color: #a1a1aa;
+  color: #94a3b8;
 }
 
 .loader-prompt-target {
@@ -114,71 +224,106 @@
 }
 
 .loader-prompt-arg {
-  color: #38bdf8;
+  color: #00d4ff;
 }
 
-/* Dynamic Telemetry / SVG Chart */
-.loader-chart-container {
-  width: 100%;
+.loader-prompt-cursor {
+  display: inline-block;
+  color: #00d4ff;
+  animation: cursorBlink 1s step-end infinite;
+  margin-left: 2px;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Runtime Telemetry Matrix (Clean Terminal Box) ── */
+.loader-matrix-box {
+  background: rgba(14, 18, 30, 0.6);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.loader-matrix-line {
+  color: rgba(0, 212, 255, 0.5);
+  font-size: 0.72rem;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.loader-matrix-line.border-top {
+  margin-bottom: 4px;
+}
+
+.loader-matrix-line.border-bottom {
+  margin-top: 4px;
+}
+
+.loader-matrix-content {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.5rem 0;
+  gap: 3px;
+  padding: 2px 6px;
 }
 
-.loader-chart-svg {
-  width: 100%;
-  height: 90px;
-  overflow: visible;
-}
-
-.loader-chart-path {
-  fill: none;
-  stroke: #ff7285;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(255, 114, 133, 0.7));
-  transition: all 0.05s linear;
-}
-
-.loader-chart-dot {
-  fill: #ffffff;
-  stroke: #ff7285;
-  stroke-width: 2;
-  filter: drop-shadow(0 0 8px rgba(255, 114, 133, 1));
-}
-
-.loader-chart-axis {
+.matrix-row {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #71717a;
-  letter-spacing: 0.05em;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.loader-chart-value {
-  color: #e4e4e7;
-  font-weight: 500;
+.matrix-label {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.72rem;
+  min-width: 68px;
 }
 
-/* Terminal Log Feed */
+.matrix-val {
+  color: #cbd5e1;
+}
+
+.matrix-val-cyan {
+  color: #00d4ff;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+.matrix-val-green {
+  color: #34d399;
+}
+
+.matrix-val-dim {
+  color: #94a3b8;
+  font-size: 0.74rem;
+}
+
+/* ── Terminal Log Feed ── */
 .loader-logs {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  min-height: 140px;
-  font-size: 0.85rem;
+  gap: 0.5rem;
+  min-height: 135px;
+  font-size: 0.84rem;
 }
 
 .loader-log-line {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: 0.65rem;
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(4px);
-  animation: logLineIn 0.25s forwards ease-out;
+  transform: translateY(3px);
+  animation: logLineIn 0.22s forwards ease-out;
 }
 
 @keyframes logLineIn {
@@ -188,57 +333,82 @@
   }
 }
 
+.loader-spinner {
+  color: #00d4ff;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+  display: inline-block;
+  min-width: 14px;
+}
+
+.loader-tag-run {
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
 .loader-tag-ok {
   color: #39ff14;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  font-size: 0.78rem;
   text-shadow: 0 0 6px rgba(57, 255, 20, 0.35);
 }
 
 .loader-log-text {
-  color: #a1a1aa;
+  color: #94a3b8;
 }
 
 .loader-log-check {
   color: #39ff14;
-  margin-left: 0.25rem;
+  margin-left: 0.2rem;
+  font-weight: 700;
 }
 
 /* Live Telemetry Ticker */
 .loader-ticker {
-  font-size: 0.8rem;
-  color: #71717a;
+  font-size: 0.78rem;
+  color: #64748b;
   letter-spacing: 0.04em;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 8px;
 }
 
 .loader-ticker-active {
-  color: #a1a1aa;
+  color: #cbd5e1;
+  font-weight: 600;
 }
 
-/* Segmented Block Progress Bar */
+/* ── Segmented Block Progress Bar ── */
 .loader-progress-wrap {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 0.45rem;
 }
 
 .loader-progress-header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
 }
 
 .loader-progress-title {
-  color: #ff7285;
-  text-shadow: 0 0 8px rgba(255, 114, 133, 0.4);
+  color: #00d4ff;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
 }
 
 .loader-progress-pct {
-  color: #e4e4e7;
+  color: #f1f5f9;
+  font-weight: 700;
 }
 
 .loader-progress-blocks {
@@ -249,37 +419,40 @@
 
 .loader-block {
   flex: 1;
-  height: 10px;
-  background-color: rgba(255, 255, 255, 0.08);
+  height: 9px;
+  background-color: rgba(255, 255, 255, 0.07);
   border-radius: 1px;
-  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+  transition: background-color 0.08s ease, box-shadow 0.08s ease;
 }
 
 .loader-block.filled {
-  background-color: #ff7285;
-  box-shadow: 0 0 8px rgba(255, 114, 133, 0.65);
+  background: linear-gradient(135deg, #00d4ff, #34d399);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.55);
 }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .terminal-loader-content {
-    width: 92%;
-    gap: 1.2rem;
+  .terminal-loader-overlay {
+    padding: 1rem;
+  }
+  .terminal-window-body {
+    padding: 16px 18px;
+    gap: 1rem;
   }
   .loader-prompt {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
   .loader-logs {
-    font-size: 0.78rem;
-    min-height: 130px;
+    font-size: 0.76rem;
+    min-height: 120px;
   }
-  .loader-chart-svg {
-    height: 75px;
+  .matrix-row {
+    font-size: 0.72rem;
   }
   .loader-skip-btn {
-    top: 16px;
-    right: 16px;
+    top: 14px;
+    right: 14px;
     font-size: 0.7rem;
-    padding: 5px 10px;
+    padding: 4px 10px;
   }
 }

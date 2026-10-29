@@ -13,6 +13,10 @@ import {
   Cpu,
   Layers,
   Sparkles,
+  Eye,
+  Maximize2,
+  Lock,
+  X,
 } from 'lucide-react'
 import './WorkstationProjects.css'
 
@@ -49,6 +53,10 @@ export interface ProjectData {
   demoUrl?: string
   codeSnippet: string
   terminalLogs: string[]
+  image: string
+  browserUrl: string
+  previewFeatures: string[]
+  screenshots?: { src: string; label: string }[]
 }
 
 const PROJECTS_DATA: ProjectData[] = [
@@ -74,6 +82,14 @@ const PROJECTS_DATA: ProjectData[] = [
     tags: ['Node.js', 'Express.js', 'React', 'MongoDB', 'Socket.io', 'JWT', 'Amazon SES', 'WebSockets', 'bcrypt'],
     githubUrl: 'https://github.com/AJAY9821',
     demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/devtinder.jpg',
+    browserUrl: 'https://devtinder.ajay.dev/explore',
+    previewFeatures: [
+      'Developer Match Feed',
+      '98% Stack Match Scoring',
+      'Live Socket.io Chat',
+      'JWT Auth Security',
+    ],
     codeSnippet: `import { Router, Request, Response } from 'express'
 import { userAuth } from '../middlewares/auth'
 import { ConnectionRequest } from '../models/connectionRequest'
@@ -148,6 +164,14 @@ requestRouter.post(
     tags: ['Node.js', 'Express.js', 'MongoDB', 'React', 'ImageKit', 'Multer', 'JWT', 'Mongoose'],
     githubUrl: 'https://github.com/AJAY9821',
     demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/music-stream.jpg',
+    browserUrl: 'https://soundwave.ajay.dev/featured',
+    previewFeatures: [
+      'Audio Waveform Player',
+      'ImageKit Cloud CDN Stream',
+      'Artist RBAC Uploads',
+      'Indexed MongoDB Queries',
+    ],
     codeSnippet: `import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import { imagekit } from '../config/imagekit'
@@ -197,26 +221,39 @@ trackRouter.post(
   },
   {
     id: 'hrms-payroll',
-    title: 'HRMS — Enterprise Payroll & Leave Platform',
+    title: 'HRMS — Enterprise Workforce, Attendance & Payroll Platform',
     fileName: 'payrollEngine.ts',
     fileLang: 'ts',
-    tagline: 'Enterprise Human Resource platform automating end-to-end payroll computation, payslip distribution, and leave approvals.',
+    tagline: 'Enterprise Human Resource platform (Inkludo) unifying real-time attendance tracking, automated payroll computation, policy compliance, and multi-tenant administration.',
     whyBuilt:
-      'Replaced error-prone manual spreadsheet payroll processing with an automated calculation engine and multi-level leave tracking for employees, managers, and HR admins at ProBey Services.',
+      'Replaced error-prone manual spreadsheet payroll processing with an automated calculation engine, live clock-in verification, and multi-level leave tracking for employees, managers, and HR admins at ProBey Services.',
     architectureWins: [
-      'Automated payroll calculation engine accounting for deductions, tax brackets, and attendance records.',
-      'Multi-tier approval state machine for leave requests with instant balance deduction.',
+      'Real-time attendance telemetry with live punch verification, secure corporate network telemetry, and policy compliance.',
+      'Automated payroll calculation engine accounting for dynamic deductions, tiered tax brackets, and attendance records.',
+      'Multi-tier approval state machine for leave requests with instant balance deduction and deficit tracking.',
       'Role-based dashboards delivering custom filtered analytics for employees, managers, and HR admins.',
-      'Modular RESTful architecture supporting seamless integration with employee master data.',
     ],
     metrics: [
+      { label: 'Attendance Tracking', value: 'Real-Time Sync' },
       { label: 'Payroll Processing', value: '100% Automated' },
-      { label: 'Approval Speed', value: 'Real-Time Sync' },
-      { label: 'Database', value: 'Indexed MongoDB' },
+      { label: 'Policy Verification', value: 'Live Active' },
     ],
     tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'REST API', 'RBAC'],
     githubUrl: 'https://github.com/AJAY9821',
     demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/hrms-dashboard.png',
+    browserUrl: 'https://hrms.probey.com/dashboard',
+    previewFeatures: [
+      'Real-Time Attendance Hub & Telemetry',
+      'Live KPI Analytics & Leave Distribution',
+      'AI Policy Guard & Compliance Engine',
+      'Automated Payroll & Tax Computation',
+    ],
+    screenshots: [
+      { src: '/projects/hrms-dashboard.png', label: '01 HRMS Command Dashboard' },
+      { src: '/projects/hrms-attendance.png', label: '02 Real-Time Attendance Hub' },
+      { src: '/projects/hrms-login.png', label: '03 Multi-Tenant Auth Portal' },
+    ],
     codeSnippet: `import { Router, Request, Response } from 'express'
 import { verifyHRAdmin } from '../middlewares/rbac'
 import { Employee } from '../models/employee'
@@ -263,26 +300,43 @@ payrollRouter.post('/payroll/compute-batch', verifyHRAdmin, async (req: Request,
   },
   {
     id: 'career-portal',
-    title: 'AI Resume Parser & Career Portal',
-    fileName: 'resumeParser.ts',
+    title: 'Probey — AI Recruitment & Career Portal',
+    fileName: 'careerPortal.ts',
     fileLang: 'ts',
-    tagline: 'Automated candidate ingestion pipeline with AI document parsing, structured talent indexing, and high-concurrency job APIs.',
+    tagline: 'Enterprise AI recruiting and onboarding platform featuring intelligent resume parsing, 92% match fit scoring, and transparent multi-stage pipelines.',
     whyBuilt:
-      'Accelerated technical recruiting at ProBey Services by leveraging Google API to parse unstructured resumes into queryable candidate profiles with optimized search.',
+      'Developed at ProBey Services to replace slow manual hiring spreadsheets with automated AI resume parsing, candidate scoring against 24+ live job openings, and a guided 5-step applicant wizard.',
     architectureWins: [
-      'AI document parsing pipeline using Google API to extract skills, experience, and education from candidate PDFs.',
-      'MongoDB schema indexing and query optimization keeping query latency low under high applicant volumes.',
-      'Server-side caching layer buffering frequent job listings and candidate search filters.',
-      'End-to-end RESTful APIs supporting job postings, applicant tracking, and recruiter hiring stages.',
+      'AI-powered document extraction pipeline analyzing resumes to compute deep skills match scores (92% accuracy).',
+      'Dynamic multi-filter job search engine serving 24+ categorized roles across Engineering, Ops, and Design with sub-30ms latency.',
+      'Structured 5-step applicant wizard guiding candidates through contact, verified skills, and final review with zero ghosting.',
+      'End-to-end recruitment lifecycle tracking covering screening tests, interview scheduling, and offer-letter generation.',
     ],
     metrics: [
-      { label: 'AI Extraction', value: 'Google API' },
-      { label: 'Query Latency', value: '< 40ms Optimized' },
-      { label: 'Data Model', value: 'Schema Indexed' },
+      { label: 'AI Match Fit', value: '92% Strong Fit' },
+      { label: 'Live Openings', value: '24 Active Roles' },
+      { label: 'Hiring Wizard', value: '5-Step Flow' },
     ],
-    tags: ['Node.js', 'Express.js', 'Google API', 'MongoDB', 'React', 'Caching'],
+    tags: ['React', 'Node.js', 'Express.js', 'Google API', 'MongoDB', 'REST API', 'TailwindCSS'],
     githubUrl: 'https://github.com/AJAY9821',
     demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/career-portal.png',
+    browserUrl: 'https://careers.probey.com',
+    previewFeatures: [
+      'Candidate Dashboard & Tracking',
+      'Multi-Stage Hiring Pipeline',
+      'AI Resume Match Scoring (92%)',
+      '24 Live Roles & Filtering',
+    ],
+    screenshots: [
+      { src: '/projects/career-portal.png', label: '01 Hero & AI Match' },
+      { src: '/projects/career-portal-dashboard.png', label: '02 Candidate Dashboard' },
+      { src: '/projects/career-portal-applications.png', label: '03 Application Status & Pipeline' },
+      { src: '/projects/career-portal-4.png', label: '04 Live Openings' },
+      { src: '/projects/career-portal-2.png', label: '05 How It Works' },
+      { src: '/projects/career-portal-3.png', label: '06 Platform Features' },
+      { src: '/projects/career-portal-5.png', label: '07 Why Probey' },
+    ],
     codeSnippet: `import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -310,13 +364,13 @@ careerRouter.post('/parse-resume', upload.single('resumePdf'), async (req: Reque
 })`,
     terminalLogs: [
       '$ npm run career:server',
-      '[CAREER-PORTAL] Recruitment platform running on port 8080.',
+      '[CAREER-PORTAL] Probey Recruitment platform online at http://localhost:8080',
       '[AI-PIPELINE] Google API authenticated for candidate resume ingestion.',
       '[MONGODB] Compound indexes initialized: { skills: 1, experienceYears: -1 }.',
-      '[UPLOAD] Incoming applicant resume: "Ajay_Singh_Resume.pdf"',
-      '[AI-EXTRACTION] Google API parsed: 14 skills, 2 degrees, 1 year experience in 820ms.',
-      '[INDEX] Candidate structured profile created and cached.',
-      '[API] 201 Created: Candidate ready for recruiter evaluation.',
+      '[UPLOAD] Incoming applicant resume: "alex-rivera-resume.pdf"',
+      '[AI-EXTRACTION] Parsed: 14 skills (React, TypeScript, Node, AWS, GraphQL), 6 yrs experience in 780ms.',
+      '[MATCH] AI match computed: 92% strong fit for Senior Frontend Engineer role.',
+      '[PIPELINE] Candidate ingested into 5-step transparent hiring wizard.',
     ],
   },
 ]
@@ -331,17 +385,25 @@ export default function WorkstationProjects({
   onNavigateSection,
 }: WorkstationProjectsProps) {
   const [activeProjectIdx, setActiveProjectIdx] = useState(0)
-  const [rightPaneTab, setRightPaneTab] = useState<'code' | 'terminal'>('code')
+  const [activeScreenshotIdx, setActiveScreenshotIdx] = useState(0)
+  const [rightPaneTab, setRightPaneTab] = useState<'preview' | 'code' | 'terminal'>('preview')
   const [copied, setCopied] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
 
   const currentProject = PROJECTS_DATA[activeProjectIdx]
+  const currentScreenshots = currentProject.screenshots || [
+    { src: currentProject.image, label: 'Main Preview' },
+  ]
+  const activeScreenshot = currentScreenshots[activeScreenshotIdx] || currentScreenshots[0]
 
   const handleNext = useCallback(() => {
     setActiveProjectIdx((prev) => (prev + 1) % PROJECTS_DATA.length)
+    setActiveScreenshotIdx(0)
   }, [])
 
   const handlePrev = useCallback(() => {
     setActiveProjectIdx((prev) => (prev - 1 + PROJECTS_DATA.length) % PROJECTS_DATA.length)
+    setActiveScreenshotIdx(0)
   }, [])
 
   // Keyboard navigation: Left/Right arrows, 1-4 for projects, Escape to return
@@ -352,14 +414,19 @@ export default function WorkstationProjects({
       } else if (e.key === 'ArrowLeft') {
         handlePrev()
       } else if (e.key === 'Escape') {
-        onClose()
+        if (lightboxOpen) {
+          setLightboxOpen(false)
+        } else {
+          onClose()
+        }
       } else if (['1', '2', '3', '4'].includes(e.key)) {
         setActiveProjectIdx(parseInt(e.key, 10) - 1)
+        setActiveScreenshotIdx(0)
       }
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [handleNext, handlePrev, onClose])
+  }, [handleNext, handlePrev, onClose, lightboxOpen])
 
   const copyCode = () => {
     navigator.clipboard.writeText(currentProject.codeSnippet)
@@ -424,7 +491,10 @@ export default function WorkstationProjects({
                     key={proj.id}
                     type="button"
                     className={`monitor-tab-btn ${isActive ? 'active' : ''}`}
-                    onClick={() => setActiveProjectIdx(idx)}
+                    onClick={() => {
+                      setActiveProjectIdx(idx)
+                      setActiveScreenshotIdx(0)
+                    }}
                   >
                     <span className={`tab-icon-lang ${proj.fileLang}`}>
                       {proj.fileLang.toUpperCase()}
@@ -532,11 +602,20 @@ export default function WorkstationProjects({
               </div>
             </div>
 
-            {/* RIGHT PANE: Code Snippet & Live Terminal Toggle */}
+            {/* RIGHT PANE: Live UI Preview, Code Snippet & Live Terminal */}
             <div className="workspace-right-pane">
-              {/* Top Sub-Bar: Code Snippet / Terminal Toggle */}
+              {/* Top Sub-Bar: Live UI Preview / Code / Terminal Toggle */}
               <div className="right-pane-toolbar">
                 <div className="pane-toggle-group">
+                  <button
+                    type="button"
+                    className={`pane-toggle-btn ${rightPaneTab === 'preview' ? 'active' : ''}`}
+                    onClick={() => setRightPaneTab('preview')}
+                  >
+                    <Eye size={14} />
+                    <span>Live UI Preview</span>
+                  </button>
+
                   <button
                     type="button"
                     className={`pane-toggle-btn ${rightPaneTab === 'code' ? 'active' : ''}`}
@@ -556,32 +635,178 @@ export default function WorkstationProjects({
                   </button>
                 </div>
 
-                {rightPaneTab === 'code' && (
-                  <button
-                    type="button"
-                    className="copy-snippet-btn"
-                    onClick={copyCode}
-                    title="Copy code to clipboard"
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={13} className="text-emerald-400" />
-                        <span className="text-emerald-400">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={13} />
-                        <span>Copy Code</span>
-                      </>
-                    )}
-                  </button>
-                )}
+                <div className="toolbar-actions-group">
+                  {rightPaneTab === 'preview' && (
+                    <button
+                      type="button"
+                      className="toolbar-action-btn"
+                      onClick={() => setLightboxOpen(true)}
+                      title="Enlarge preview to full resolution"
+                    >
+                      <Maximize2 size={13} />
+                      <span>Fullscreen</span>
+                    </button>
+                  )}
+
+                  {rightPaneTab === 'code' && (
+                    <button
+                      type="button"
+                      className="copy-snippet-btn"
+                      onClick={copyCode}
+                      title="Copy code to clipboard"
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={13} className="text-emerald-400" />
+                          <span className="text-emerald-400">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={13} />
+                          <span>Copy Code</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* Code Snippet Viewer or Terminal Output */}
+              {/* Viewport Content: Live UI Preview, Code Snippet, or Terminal */}
               <div className="right-pane-viewport">
                 <AnimatePresence mode="wait">
-                  {rightPaneTab === 'code' ? (
+                  {rightPaneTab === 'preview' ? (
+                    <motion.div
+                      key={`preview-${currentProject.id}`}
+                      className="preview-browser-wrapper"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {/* Browser Window Chrome */}
+                      <div className="preview-browser-frame">
+                        <div className="browser-address-bar">
+                          <div className="browser-nav-dots">
+                            <span className="nav-dot red" />
+                            <span className="nav-dot yellow" />
+                            <span className="nav-dot green" />
+                          </div>
+
+                          <div className="browser-url-pill">
+                            <Lock size={11} className="text-emerald-400 shrink-0" />
+                            <span className="browser-url-text">{currentProject.browserUrl}</span>
+                            <span className="browser-status-live">PRODUCTION UI</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="browser-zoom-btn"
+                            onClick={() => setLightboxOpen(true)}
+                            title="Expand Fullscreen"
+                          >
+                            <Maximize2 size={12} />
+                          </button>
+                        </div>
+
+                        {/* Multi-screen sub-navigation if project has multiple screens */}
+                        {currentScreenshots.length > 1 && (
+                          <div className="preview-screens-nav">
+                            {currentScreenshots.map((scr, sIdx) => (
+                              <button
+                                key={sIdx}
+                                type="button"
+                                className={`preview-screen-tab ${sIdx === activeScreenshotIdx ? 'active' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setActiveScreenshotIdx(sIdx)
+                                }}
+                              >
+                                <span>{scr.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Interactive Project Screenshot Card */}
+                        <div
+                          className="preview-image-container"
+                          onClick={() => setLightboxOpen(true)}
+                          role="button"
+                          tabIndex={0}
+                          title="Click to view high-resolution image"
+                        >
+                          <img
+                            src={activeScreenshot.src}
+                            alt={`${currentProject.title} — ${activeScreenshot.label}`}
+                            className="preview-screenshot-img"
+                            loading="lazy"
+                          />
+
+                          {/* Hover Overlay Hint */}
+                          <div className="preview-hover-scrim">
+                            <span className="preview-zoom-badge">
+                              <Maximize2 size={13} /> Click to Inspect Fullscreen
+                            </span>
+                          </div>
+
+                          {/* Multi-screen navigation cycle arrows */}
+                          {currentScreenshots.length > 1 && (
+                            <>
+                              <button
+                                type="button"
+                                className="screenshot-cycle-arrow prev"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setActiveScreenshotIdx((prev) => (prev - 1 + currentScreenshots.length) % currentScreenshots.length)
+                                }}
+                                title="Previous Screen"
+                                aria-label="Previous Screen"
+                              >
+                                <ChevronLeft size={16} />
+                              </button>
+                              <button
+                                type="button"
+                                className="screenshot-cycle-arrow next"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setActiveScreenshotIdx((prev) => (prev + 1) % currentScreenshots.length)
+                                }}
+                                title="Next Screen"
+                                aria-label="Next Screen"
+                              >
+                                <ChevronRight size={16} />
+                              </button>
+                            </>
+                          )}
+
+                          {/* Feature Badges Strip Overlay at bottom of screenshot */}
+                          <div className="preview-features-strip">
+                            {currentProject.previewFeatures.map((feat, fIdx) => (
+                              <span key={fIdx} className="preview-feature-tag">
+                                <Sparkles size={11} className="text-cyan-400 shrink-0" />
+                                {feat}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Info Strip */}
+                      <div className="preview-footer-strip">
+                        <div className="footer-status-indicator">
+                          <span className="pulse-indicator-dot" />
+                          <span className="font-mono text-xs text-slate-300">
+                            Production Architecture &amp; UI
+                          </span>
+                        </div>
+                        <div className="footer-switch-hint">
+                          <span className="text-xs text-slate-400 font-mono">
+                            Switch tabs for <span className="text-cyan-400">&lt;/&gt; Code</span> &amp; <span className="text-pink-400">&gt;_ Terminal</span>
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : rightPaneTab === 'code' ? (
                     <motion.div
                       key={`code-${currentProject.id}`}
                       className="code-editor-view"
@@ -716,6 +941,82 @@ export default function WorkstationProjects({
           <span className="dock-prefix">04</span> CONTACT
         </button>
       </motion.div>
+
+      {/* ── High-Resolution Lightbox Modal ── */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            className="preview-lightbox-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxOpen(false)}
+          >
+            <motion.div
+              className="preview-lightbox-modal"
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.94, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="lightbox-header">
+                <div className="flex items-center gap-2">
+                  <span className="lightbox-browser-dot red" onClick={() => setLightboxOpen(false)} />
+                  <span className="lightbox-browser-dot yellow" />
+                  <span className="lightbox-browser-dot green" />
+                  <span className="lightbox-title font-mono">
+                    {currentProject.title} {currentScreenshots.length > 1 ? `· ${activeScreenshot.label} (${activeScreenshotIdx + 1}/${currentScreenshots.length})` : '· UI Preview'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="lightbox-close-btn"
+                  onClick={() => setLightboxOpen(false)}
+                  aria-label="Close Preview"
+                >
+                  <X size={16} /> [ESC]
+                </button>
+              </div>
+              <div className="lightbox-img-wrap">
+                {currentScreenshots.length > 1 && (
+                  <button
+                    type="button"
+                    className="lightbox-nav-arrow-btn prev"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setActiveScreenshotIdx((prev) => (prev - 1 + currentScreenshots.length) % currentScreenshots.length)
+                    }}
+                    title="Previous Screen"
+                    aria-label="Previous Screen"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                )}
+                <img
+                  src={activeScreenshot.src}
+                  alt={`${currentProject.title} — ${activeScreenshot.label}`}
+                  className="lightbox-img"
+                />
+                {currentScreenshots.length > 1 && (
+                  <button
+                    type="button"
+                    className="lightbox-nav-arrow-btn next"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setActiveScreenshotIdx((prev) => (prev + 1) % currentScreenshots.length)
+                    }}
+                    title="Next Screen"
+                    aria-label="Next Screen"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
