@@ -229,6 +229,9 @@
 .tab-icon-lang.tsx { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
 .tab-icon-lang.py { background: rgba(250, 204, 21, 0.2); color: #facc15; }
 .tab-icon-lang.ts { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+.tab-icon-lang.js { background: rgba(250, 204, 21, 0.25); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.35); }
+.tab-icon-lang.jsx { background: rgba(56, 189, 248, 0.25); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
+.tab-icon-lang.mern { background: rgba(16, 185, 129, 0.25); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); }
 
 .tab-active-line {
   position: absolute;

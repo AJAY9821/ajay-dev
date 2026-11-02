@@ -61,10 +61,165 @@ export interface ProjectData {
 
 const PROJECTS_DATA: ProjectData[] = [
   {
+    id: 'hrms',
+    title: 'HRMS — Enterprise Workforce, Attendance & Payroll Platform',
+    fileName: 'hrms.js',
+    fileLang: 'js',
+    tagline: 'Enterprise Human Resource platform (Inkludo) unifying real-time attendance tracking, automated payroll computation, policy compliance, and multi-tenant administration.',
+    whyBuilt:
+      'Replaced error-prone manual spreadsheet payroll processing with an automated calculation engine, live clock-in verification, and multi-level leave tracking for employees, managers, and HR admins at ProBey Services.',
+    architectureWins: [
+      'Real-time attendance telemetry with live punch verification, secure corporate network telemetry, and policy compliance.',
+      'Automated payroll calculation engine accounting for dynamic deductions, tiered tax brackets, and attendance records.',
+      'Multi-tier approval state machine for leave requests with instant balance deduction and deficit tracking.',
+      'Role-based dashboards delivering custom filtered analytics for employees, managers, and HR admins.',
+    ],
+    metrics: [
+      { label: 'Attendance Tracking', value: 'Real-Time Sync' },
+      { label: 'Payroll Processing', value: '100% Automated' },
+      { label: 'Policy Verification', value: 'Live Active' },
+    ],
+    tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'REST API', 'RBAC'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/hrms-dashboard.png',
+    browserUrl: 'https://hrms.probey.com/dashboard',
+    previewFeatures: [
+      'Real-Time Attendance Hub & Telemetry',
+      'Live KPI Analytics & Leave Distribution',
+      'AI Policy Guard & Compliance Engine',
+      'Automated Payroll & Tax Computation',
+    ],
+    screenshots: [
+      { src: '/projects/hrms-dashboard.png', label: '01 HRMS Command Dashboard' },
+      { src: '/projects/hrms-attendance.png', label: '02 Real-Time Attendance Hub' },
+      { src: '/projects/hrms-login.png', label: '03 Multi-Tenant Auth Portal' },
+    ],
+    codeSnippet: `import express from 'express'
+import { verifyHRAdmin } from '../middlewares/rbac.js'
+import Employee from '../models/Employee.js'
+import Payslip from '../models/Payslip.js'
+
+export const hrmsRouter = express.Router()
+
+// Compute monthly payroll batch and generate payslips
+hrmsRouter.post('/payroll/compute-batch', verifyHRAdmin, async (req, res) => {
+  const { month, year } = req.body
+  const activeEmployees = await Employee.find({ status: 'ACTIVE' }).populate('leaveBalance')
+
+  const payslips = activeEmployees.map((emp) => {
+    const grossSalary = emp.baseSalary + (emp.allowances || 0)
+    const unpaidLeaves = emp.unpaidLeavesThisMonth || 0
+    const perDayDeduction = (emp.baseSalary / 30) * unpaidLeaves
+    const taxDeduction = grossSalary > 50000 ? grossSalary * 0.1 : 0
+    const netSalary = Math.round(grossSalary - perDayDeduction - taxDeduction)
+
+    return {
+      employeeId: emp._id,
+      month,
+      year,
+      grossSalary,
+      deductions: Math.round(perDayDeduction + taxDeduction),
+      netSalary,
+      status: 'PROCESSED',
+    }
+  })
+
+  await Payslip.insertMany(payslips)
+  return res.json({ message: \`Processed payroll for \${payslips.length} employees\`, totalProcessed: payslips.length })
+})`,
+    terminalLogs: [
+      '$ npm run hrms:start',
+      '[HRMS-CORE] Enterprise HR service online at http://localhost:5000',
+      '[MONGODB] Connected to MongoDB Atlas cluster (collections: employees, attendance, payslips).',
+      '[RBAC] Role permissions loaded: Employee, Manager, HR Admin.',
+      '[PAYROLL] Initializing monthly automated salary computation...',
+      '[LEAVE] Syncing approved leaves against monthly attendance ledger.',
+      '[CALC] Batch processing 124 employee records...',
+      '[BATCH] 124 payslips generated with tax/deduction algorithms in 64ms.',
+      '[DASHBOARD] Real-time KPI charts broadcast to HR Admin portals.',
+    ],
+  },
+  {
+    id: 'career-portal',
+    title: 'Probey — AI Recruitment & Candidate Career Portal',
+    fileName: 'candidatePortal.js',
+    fileLang: 'js',
+    tagline: 'Enterprise AI recruiting and onboarding platform featuring intelligent resume parsing, 92% match fit scoring, and transparent multi-stage pipelines.',
+    whyBuilt:
+      'Developed at ProBey Services to replace slow manual hiring spreadsheets with automated AI resume parsing, candidate scoring against 24+ live job openings, and a guided 5-step applicant wizard.',
+    architectureWins: [
+      'AI-powered document extraction pipeline analyzing resumes to compute deep skills match scores (92% accuracy).',
+      'Dynamic multi-filter job search engine serving 24+ categorized roles across Engineering, Ops, and Design with sub-30ms latency.',
+      'Structured 5-step applicant wizard guiding candidates through contact, verified skills, and final review with zero ghosting.',
+      'End-to-end recruitment lifecycle tracking covering screening tests, interview scheduling, and offer-letter generation.',
+    ],
+    metrics: [
+      { label: 'AI Match Fit', value: '92% Strong Fit' },
+      { label: 'Live Openings', value: '24 Active Roles' },
+      { label: 'Hiring Wizard', value: '5-Step Flow' },
+    ],
+    tags: ['React', 'Node.js', 'Express.js', 'Google API', 'MongoDB', 'REST API', 'TailwindCSS'],
+    githubUrl: 'https://github.com/AJAY9821',
+    demoUrl: 'https://github.com/AJAY9821',
+    image: '/projects/career-portal.png',
+    browserUrl: 'https://careers.probey.com',
+    previewFeatures: [
+      'Candidate Dashboard & Tracking',
+      'Multi-Stage Hiring Pipeline',
+      'AI Resume Match Scoring (92%)',
+      '24 Live Roles & Filtering',
+    ],
+    screenshots: [
+      { src: '/projects/career-portal.png', label: '01 Hero & AI Match' },
+      { src: '/projects/career-portal-dashboard.png', label: '02 Candidate Dashboard' },
+      { src: '/projects/career-portal-applications.png', label: '03 Application Status & Pipeline' },
+      { src: '/projects/career-portal-4.png', label: '04 Live Openings' },
+      { src: '/projects/career-portal-2.png', label: '05 How It Works' },
+      { src: '/projects/career-portal-3.png', label: '06 Platform Features' },
+      { src: '/projects/career-portal-5.png', label: '07 Why Probey' },
+    ],
+    codeSnippet: `import express from 'express'
+import multer from 'multer'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import CandidateProfile from '../models/CandidateProfile.js'
+
+const upload = multer({ storage: multer.memoryStorage() })
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
+export const candidateRouter = express.Router()
+
+candidateRouter.post('/parse-resume', upload.single('resumePdf'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Resume PDF required' })
+
+  // Send document buffer to Google API with structured schema instructions
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const prompt = 'Extract candidate name, contact, skills array, experience list, and education into valid JSON.'
+
+  const result = await model.generateContent([
+    { inlineData: { data: req.file.buffer.toString('base64'), mimeType: 'application/pdf' } },
+    prompt,
+  ])
+
+  const parsedData = JSON.parse(result.response.text())
+  const profile = await CandidateProfile.create(parsedData)
+  return res.status(201).json({ message: 'Resume parsed and indexed successfully', profile })
+})`,
+    terminalLogs: [
+      '$ npm run career:server',
+      '[CAREER-PORTAL] Probey Recruitment platform online at http://localhost:8080',
+      '[AI-PIPELINE] Google API authenticated for candidate resume ingestion.',
+      '[MONGODB] Compound indexes initialized: { skills: 1, experienceYears: -1 }.',
+      '[UPLOAD] Incoming applicant resume: "alex-rivera-resume.pdf"',
+      '[AI-EXTRACTION] Parsed: 14 skills (React, Node, Express, MongoDB), 6 yrs experience in 780ms.',
+      '[MATCH] AI match computed: 92% strong fit for Senior Frontend Engineer role.',
+      '[PIPELINE] Candidate ingested into 5-step transparent hiring wizard.',
+    ],
+  },
+  {
     id: 'devtinder',
     title: 'DevTinder — Developer Networking Platform',
-    fileName: 'connectionController.ts',
-    fileLang: 'ts',
+    fileName: 'devTinder.js',
+    fileLang: 'js',
     tagline: 'MERN stack developer platform for professional networking, connection requests, and real-time chat with JWT auth.',
     whyBuilt:
       'Developers need a dedicated space to connect, review skill profiles, and collaborate on software stacks. DevTinder delivers swiping, matching, secure authentication, and instant messaging.',
@@ -90,18 +245,18 @@ const PROJECTS_DATA: ProjectData[] = [
       'Live Socket.io Chat',
       'JWT Auth Security',
     ],
-    codeSnippet: `import { Router, Request, Response } from 'express'
-import { userAuth } from '../middlewares/auth'
-import { ConnectionRequest } from '../models/connectionRequest'
-import { sendEmail } from '../utils/ses'
+    codeSnippet: `import express from 'express'
+import { userAuth } from '../middlewares/auth.js'
+import ConnectionRequest from '../models/ConnectionRequest.js'
+import { sendEmail } from '../utils/ses.js'
 
-export const requestRouter = Router()
+export const devTinderRouter = express.Router()
 
 // Send Connection Request (interested / ignored)
-requestRouter.post(
+devTinderRouter.post(
   '/request/send/:status/:toUserId',
   userAuth,
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     const fromUserId = req.user._id
     const { status, toUserId } = req.params
 
@@ -137,7 +292,7 @@ requestRouter.post(
       '[AUTH] JWT authentication middleware initialized with 256-bit secret.',
       '[SOCKET] Socket.io server mounted on port 7777 (transport: websocket).',
       '[AMAZON-SES] Cloud mail transport verified: region=ap-south-1.',
-      '[CLIENT] React 19 SPA mounted with TailwindCSS responsive layout.',
+      '[CLIENT] React SPA mounted with responsive Tailwind layout.',
       '[TEST] POST /request/send/interested/65f12a... -> 200 OK (18ms).',
       '[NOTIFY] Amazon SES email queued & dispatched successfully.',
     ],
@@ -145,8 +300,8 @@ requestRouter.post(
   {
     id: 'music-stream',
     title: 'Music Streaming Application',
-    fileName: 'musicController.ts',
-    fileLang: 'ts',
+    fileName: 'musicController.js',
+    fileLang: 'js',
     tagline: 'Full-stack audio streaming service featuring cloud media ingestion, album management, and RBAC authorization.',
     whyBuilt:
       'Built to provide smooth audio playback with cloud-hosted media assets, secure artist upload workflows, and role-based permissions separating listeners from content creators.',
@@ -172,21 +327,21 @@ requestRouter.post(
       'Artist RBAC Uploads',
       'Indexed MongoDB Queries',
     ],
-    codeSnippet: `import { Router, Request, Response } from 'express'
+    codeSnippet: `import express from 'express'
 import multer from 'multer'
-import { imagekit } from '../config/imagekit'
-import { Track } from '../models/trackModel'
-import { verifyArtistRole } from '../middlewares/rbac'
+import { imagekit } from '../config/imagekit.js'
+import Track from '../models/Track.js'
+import { verifyArtistRole } from '../middlewares/rbac.js'
 
 const upload = multer({ storage: multer.memoryStorage() })
-export const trackRouter = Router()
+export const musicRouter = express.Router()
 
 // Upload audio track to ImageKit and persist metadata in MongoDB
-trackRouter.post(
+musicRouter.post(
   '/tracks/upload',
   verifyArtistRole,
   upload.single('audioFile'),
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'Audio file is required' })
 
     // Stream buffer directly to ImageKit CDN
@@ -217,160 +372,6 @@ trackRouter.post(
       '[STREAM] Upload request received: "track_04_ambient.mp3" (8.4MB).',
       '[IMAGEKIT] Direct memory buffer uploaded to /music-app/tracks in 142ms.',
       '[DATABASE] Track document saved with indexed title and artist fields.',
-    ],
-  },
-  {
-    id: 'hrms-payroll',
-    title: 'HRMS — Enterprise Workforce, Attendance & Payroll Platform',
-    fileName: 'payrollEngine.ts',
-    fileLang: 'ts',
-    tagline: 'Enterprise Human Resource platform (Inkludo) unifying real-time attendance tracking, automated payroll computation, policy compliance, and multi-tenant administration.',
-    whyBuilt:
-      'Replaced error-prone manual spreadsheet payroll processing with an automated calculation engine, live clock-in verification, and multi-level leave tracking for employees, managers, and HR admins at ProBey Services.',
-    architectureWins: [
-      'Real-time attendance telemetry with live punch verification, secure corporate network telemetry, and policy compliance.',
-      'Automated payroll calculation engine accounting for dynamic deductions, tiered tax brackets, and attendance records.',
-      'Multi-tier approval state machine for leave requests with instant balance deduction and deficit tracking.',
-      'Role-based dashboards delivering custom filtered analytics for employees, managers, and HR admins.',
-    ],
-    metrics: [
-      { label: 'Attendance Tracking', value: 'Real-Time Sync' },
-      { label: 'Payroll Processing', value: '100% Automated' },
-      { label: 'Policy Verification', value: 'Live Active' },
-    ],
-    tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'REST API', 'RBAC'],
-    githubUrl: 'https://github.com/AJAY9821',
-    demoUrl: 'https://github.com/AJAY9821',
-    image: '/projects/hrms-dashboard.png',
-    browserUrl: 'https://hrms.probey.com/dashboard',
-    previewFeatures: [
-      'Real-Time Attendance Hub & Telemetry',
-      'Live KPI Analytics & Leave Distribution',
-      'AI Policy Guard & Compliance Engine',
-      'Automated Payroll & Tax Computation',
-    ],
-    screenshots: [
-      { src: '/projects/hrms-dashboard.png', label: '01 HRMS Command Dashboard' },
-      { src: '/projects/hrms-attendance.png', label: '02 Real-Time Attendance Hub' },
-      { src: '/projects/hrms-login.png', label: '03 Multi-Tenant Auth Portal' },
-    ],
-    codeSnippet: `import { Router, Request, Response } from 'express'
-import { verifyHRAdmin } from '../middlewares/rbac'
-import { Employee } from '../models/employee'
-import { Payslip } from '../models/payslip'
-
-export const payrollRouter = Router()
-
-// Compute monthly payroll batch and generate payslips
-payrollRouter.post('/payroll/compute-batch', verifyHRAdmin, async (req: Request, res: Response) => {
-  const { month, year } = req.body
-  const activeEmployees = await Employee.find({ status: 'ACTIVE' }).populate('leaveBalance')
-
-  const payslips = activeEmployees.map((emp) => {
-    const grossSalary = emp.baseSalary + (emp.allowances || 0)
-    const unpaidLeaves = emp.unpaidLeavesThisMonth || 0
-    const perDayDeduction = (emp.baseSalary / 30) * unpaidLeaves
-    const taxDeduction = grossSalary > 50000 ? grossSalary * 0.1 : 0
-    const netSalary = Math.round(grossSalary - perDayDeduction - taxDeduction)
-
-    return {
-      employeeId: emp._id,
-      month,
-      year,
-      grossSalary,
-      deductions: Math.round(perDayDeduction + taxDeduction),
-      netSalary,
-      status: 'PROCESSED',
-    }
-  })
-
-  await Payslip.insertMany(payslips)
-  return res.json({ message: \`Processed payroll for \${payslips.length} employees\`, totalProcessed: payslips.length })
-})`,
-    terminalLogs: [
-      '$ npm run hrms:start',
-      '[HRMS-CORE] Enterprise HR service online.',
-      '[RBAC] Role permissions loaded: Employee, Manager, HR Admin.',
-      '[PAYROLL] Initializing monthly automated salary computation...',
-      '[LEAVE] Syncing approved leaves against monthly attendance ledger.',
-      '[CALC] Batch processing 124 employee records...',
-      '[BATCH] 124 payslips generated with tax/deduction algorithms in 64ms.',
-      '[DASHBOARD] Real-time KPI charts broadcast to HR Admin portals.',
-    ],
-  },
-  {
-    id: 'career-portal',
-    title: 'Probey — AI Recruitment & Career Portal',
-    fileName: 'careerPortal.ts',
-    fileLang: 'ts',
-    tagline: 'Enterprise AI recruiting and onboarding platform featuring intelligent resume parsing, 92% match fit scoring, and transparent multi-stage pipelines.',
-    whyBuilt:
-      'Developed at ProBey Services to replace slow manual hiring spreadsheets with automated AI resume parsing, candidate scoring against 24+ live job openings, and a guided 5-step applicant wizard.',
-    architectureWins: [
-      'AI-powered document extraction pipeline analyzing resumes to compute deep skills match scores (92% accuracy).',
-      'Dynamic multi-filter job search engine serving 24+ categorized roles across Engineering, Ops, and Design with sub-30ms latency.',
-      'Structured 5-step applicant wizard guiding candidates through contact, verified skills, and final review with zero ghosting.',
-      'End-to-end recruitment lifecycle tracking covering screening tests, interview scheduling, and offer-letter generation.',
-    ],
-    metrics: [
-      { label: 'AI Match Fit', value: '92% Strong Fit' },
-      { label: 'Live Openings', value: '24 Active Roles' },
-      { label: 'Hiring Wizard', value: '5-Step Flow' },
-    ],
-    tags: ['React', 'Node.js', 'Express.js', 'Google API', 'MongoDB', 'REST API', 'TailwindCSS'],
-    githubUrl: 'https://github.com/AJAY9821',
-    demoUrl: 'https://github.com/AJAY9821',
-    image: '/projects/career-portal.png',
-    browserUrl: 'https://careers.probey.com',
-    previewFeatures: [
-      'Candidate Dashboard & Tracking',
-      'Multi-Stage Hiring Pipeline',
-      'AI Resume Match Scoring (92%)',
-      '24 Live Roles & Filtering',
-    ],
-    screenshots: [
-      { src: '/projects/career-portal.png', label: '01 Hero & AI Match' },
-      { src: '/projects/career-portal-dashboard.png', label: '02 Candidate Dashboard' },
-      { src: '/projects/career-portal-applications.png', label: '03 Application Status & Pipeline' },
-      { src: '/projects/career-portal-4.png', label: '04 Live Openings' },
-      { src: '/projects/career-portal-2.png', label: '05 How It Works' },
-      { src: '/projects/career-portal-3.png', label: '06 Platform Features' },
-      { src: '/projects/career-portal-5.png', label: '07 Why Probey' },
-    ],
-    codeSnippet: `import { Router, Request, Response } from 'express'
-import multer from 'multer'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { CandidateProfile } from '../models/candidate'
-
-const upload = multer({ storage: multer.memoryStorage() })
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!)
-export const careerRouter = Router()
-
-careerRouter.post('/parse-resume', upload.single('resumePdf'), async (req: Request, res: Response) => {
-  if (!req.file) return res.status(400).json({ error: 'Resume PDF required' })
-
-  // Send document buffer to Google API with structured schema instructions
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-  const prompt = 'Extract candidate name, contact, skills array, experience list, and education into valid JSON.'
-
-  const result = await model.generateContent([
-    { inlineData: { data: req.file.buffer.toString('base64'), mimeType: 'application/pdf' } },
-    prompt,
-  ])
-
-  const parsedData = JSON.parse(result.response.text())
-  const profile = await CandidateProfile.create(parsedData)
-  return res.status(201).json({ message: 'Resume parsed and indexed', profile })
-})`,
-    terminalLogs: [
-      '$ npm run career:server',
-      '[CAREER-PORTAL] Probey Recruitment platform online at http://localhost:8080',
-      '[AI-PIPELINE] Google API authenticated for candidate resume ingestion.',
-      '[MONGODB] Compound indexes initialized: { skills: 1, experienceYears: -1 }.',
-      '[UPLOAD] Incoming applicant resume: "alex-rivera-resume.pdf"',
-      '[AI-EXTRACTION] Parsed: 14 skills (React, TypeScript, Node, AWS, GraphQL), 6 yrs experience in 780ms.',
-      '[MATCH] AI match computed: 92% strong fit for Senior Frontend Engineer role.',
-      '[PIPELINE] Candidate ingested into 5-step transparent hiring wizard.',
     ],
   },
 ]
