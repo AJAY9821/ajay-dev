@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Mail,
   FileText,
+  Download,
   Send,
   Check,
   Copy,
@@ -252,13 +253,27 @@ export default function SmartphoneContact({
                 href="https://leetcode.com/u/Ajay_pa/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="quick-action-btn resume"
+                className="quick-action-btn leetcode"
                 title="LeetCode Profile"
               >
                 <div className="action-circle">
-                  <FileText size={18} />
+                  <FileText size={17} />
                 </div>
                 <span className="action-label">LeetCode</span>
+              </a>
+
+              <a
+                href="/resume.pdf"
+                download="Ajay_Singh_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quick-action-btn resume"
+                title="Download Ajay Singh Resume PDF"
+              >
+                <div className="action-circle">
+                  <Download size={17} />
+                </div>
+                <span className="action-label">Resume</span>
               </a>
             </div>
 

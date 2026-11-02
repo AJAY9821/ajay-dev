@@ -8,9 +8,11 @@ export default function Navbar() {
         {/* ── Resume Button (top right) ── */}
         <a
           href="/resume.pdf"
-          download
+          download="Ajay_Singh_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
           className="resume-btn btn-outline"
-          aria-label="Download resume PDF"
+          aria-label="Download Ajay Singh Resume PDF"
         >
           <Download size={14} strokeWidth={2} />
           Resume
